@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nation-State Cyber Weapons Arsenal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --bg2: #111827;
+    --bg3: #1a2332;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --accent: #00f5d4;
+    --accent2: #0ea5e9;
+    --red: #ef4444;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --purple: #a855f7;
+    --pink: #ec4899;
+    --gradient: linear-gradient(135deg, #00f5d4, #0ea5e9);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at 20% 50%, rgba(0,245,212,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(14,165,233,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(168,85,247,0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Matrix rain canvas */
+  #matrix-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 1px solid rgba(0,245,212,0.3);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    background: rgba(0,245,212,0.05);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text2);
+    max-width: 720px;
+    margin-bottom: 48px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-stat-label {
+    font-size: 0.8rem;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  /* Section */
+  section { padding: 80px 0; }
+
+  .section-tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-tag.nsa { background: rgba(239,68,68,0.15); color: var(--red); }
+  .section-tag.cia { background: rgba(14,165,233,0.15); color: var(--accent2); }
+  .section-tag.israel { background: rgba(168,85,247,0.15); color: var(--purple); }
+  .section-tag.russia { background: rgba(249,115,22,0.15); color: var(--orange); }
+  .section-tag.china { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .section-tag.nso { background: rgba(236,72,153,0.15); color: var(--pink); }
+  .section-tag.broker { background: rgba(0,245,212,0.15); color: var(--accent); }
+
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .section-subtitle {
+    color: var(--text2);
+    font-size: 1.05rem;
+    max-width: 640px;
+    margin-bottom: 48px;
+  }
+
+  /* Tool Grid */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 20px;
+  }
+
+  .tool-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,245,212,0.08);
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--gradient);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tool-card:hover::before { opacity: 1; }
+
+  .tool-category {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .tool-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .tool-aka {
+    font-size: 0.8rem;
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 12px;
+  }
+
+  .tool-desc {
+    font-size: 0.9rem;
+    color: var(--text2);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .tool-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .tool-tag {
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .tool-tag.red { border-color: rgba(239,68,68,0.3); color: var(--red); }
+  .tool-tag.blue { border-color: rgba(14,165,233,0.3); color: var(--accent2); }
+  .tool-tag.green { border-color: rgba(0,245,212,0.3); color: var(--accent); }
+  .tool-tag.purple { border-color: rgba(168,85,247,0.3); color: var(--purple); }
+  .tool-tag.orange { border-color: rgba(249,115,22,0.3); color: var(--orange); }
+  .tool-tag.yellow { border-color: rgba(234,179,8,0.3); color: var(--yellow); }
+  .tool-tag.pink { border-color: rgba(236,72,153,0.3); color: var(--pink); }
+
+  .tool-details {
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+
+  .tool-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.82rem;
+  }
+
+  .tool-detail-label {
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .tool-detail-value {
+    color: var(--text);
+    text-align: right;
+    max-width: 60%;
+  }
+
+  /* Market Section */
+  .market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .market-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s;
+  }
+
+  .market-card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-2px);
+  }
+
+  .market-price {
+    font-size: 2rem;
+    font-weight: 900;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .market-label {
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin: 4px 0 12px;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 32px 0;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th {
+    background: var(--bg3);
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .highlight { color: var(--accent); font-weight: 600; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text2);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Acquisition table */
+  .acq-table td:first-child { font-weight: 600; color: var(--text); }
+
+  /* Footer */
+  footer {
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 0.85rem;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text2); }
+
+  /* Glow effect for important text */
+  .glow { text-shadow: 0 0 20px rgba(0,245,212,0.3); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tool-grid { grid-template-columns: 1fr; }
+    .market-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    .hero-stat-number { font-size: 1.8rem; }
+    section { padding: 48px 0; }
+  }
+
+  @media (max-width: 480px) {
+    .tool-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 16px; }
+    .tool-card { padding: 20px; }
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,14,23,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: none;
+  }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-weight: 800;
+    font-size: 0.9rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .nav-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">// STATE-TOOLS</div>
+    <div class="nav-links">
+      <a href="#nsa">NSA</a>
+      <a href="#cia">CIA</a>
+      <a href="#nso">NSO/Pegasus</a>
+      <a href="#russia">Russia</a>
+      <a href="#china">China</a>
+      <a href="#market">Market</a>
+      <a href="#acquisition">Acquisition</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">&#x26A1; Classified Intelligence</div>
+    <h1>Nation-State Cyber<br>Weapons Arsenal</h1>
+    <p>A comprehensive intelligence dossier on the most sophisticated cyber weapons developed, used, and traded by nation-state actors — from NSA's Equation Group to NSO's Pegasus, CIA's Vault 7 arsenal, and the billion-dollar zero-day broker market.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-number">50+</div>
+        <div class="hero-stat-label">Classified Tools</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">$20M</div>
+        <div class="hero-stat-label">Max Exploit Payout</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">7</div>
+        <div class="hero-stat-label">Nation-State Groups</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">44%</div>
+        <div class="hero-stat-label">Annual Price Inflation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- NSA / Equation Group -->
+<section id="nsa">
+  <span class="section-tag nsa">NSA / Equation Group</span>
+  <h2 class="section-title">Equation Group Arsenal</h2>
+  <p class="section-subtitle">The most sophisticated cyber weapons ever created. Leaked by the Shadow Brokers in 2016-2017. Kaspersky called them "the most advanced threat actor" — operating at a level beyond any known adversary. Their tools infected 200,000+ systems within weeks of leaking.</p>
+
+  <div class="tabs" id="nsa-tabs">
+    <button class="tab active" data-tab="nsa-exploits">Exploits & Implants</button>
+    <button class="tab" data-tab="nsa-firmware">Firmware & Persistence</button>
+    <button class="tab" data-tab="nsa-post">Post-Exploitation</button>
+  </div>
+
+  <div id="nsa-exploits" class="tab-content active">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">EXPLOIT</div>
+        <div class="tool-name">ETERNALBLUE</div>
+        <div class="tool-aka">MS17-010 / CVE-2017-0144</div>
+        <div class="tool-desc">SMBv1 remote code execution exploit targeting Windows. The most destructive NSA tool ever leaked. Weaponized by WannaCry (200K+ systems, $4B damages), NotPetya ($10B damages), and multiple ransomware operations. Exploits a buffer overflow in the SMBv1 server to execute arbitrary code in kernel mode.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">KERNEL-RCE</span>
+          <span class="tool-tag red">SMB</span>
+          <span class="tool-tag orange">WORM-CAPABLE</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Target</span><span class="tool-detail-value">Windows XP/7/8/10, Server 2003-2016</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Persistence</span><span class="tool-detail-value">Memory-only (kernel SYSENTER hook)</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Impact</span><span class="tool-detail-value">Total system compromise</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Black Market</span><span class="tool-detail-value">$500K-$5M (estimated)</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">IMPLANT</div>
+        <div class="tool-name">DOUBLEPULSAR</div>
+        <div class="tool-aka">DOPU / SMB Backdoor</div>
+        <div class="tool-desc">Kernel-mode (Ring 0) SMB backdoor typically deployed by ETERNALBLUE. Hooks the SYSENTER instruction for stealth. Supports ping (opcode 0x23), shellcode exec (0xC8), DLL injection, and uninstall (0x77). Uses SMB Trans2 SESSION_SETUP (0x0E) as covert channel — a normally unimplemented command, making it highly detectable yet powerful. Over 200,000 systems infected within two weeks of the leak.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">KERNEL-BACKDOOR</span>
+          <span class="tool-tag red">MEMORY-ONLY</span>
+          <span class="tool-tag orange">NO-AUTH</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Type</span><span class="tool-detail-value">Kernel-mode SMB implant</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Covert Channel</span><span class="tool-detail-value">SMB Trans2 subcommand 0x0E</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Capabilities</span><span class="tool-detail-value">Ping, Exec, DLL injection, Uninstall</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">EXPLOIT</div>
+        <div class="tool-name">ETERNALROMANCE</div>
+        <div class="tool-aka">SMBv1 RCE</div>
+        <div class="tool-desc">SMBv1 remote code execution exploit targeting Windows. Part of the Equation Group's SMB exploit suite alongside ETERNALBLUE and ETERNALSYNERGY. Leverages a vulnerability in SMBv1 negotiation to achieve remote code execution without authentication.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">RCE</span>
+          <span class="tool-tag red">SMBv1</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">FRAMEWORK</div>
+        <div class="tool-name">FUZZBUNCH</div>
+        <div class="tool-aka">Equation Group Exploit Framework</div>
+        <div class="tool-desc">Interactive GUI-based exploitation framework used to manage and deploy Equation Group exploits (ETERNALBLUE, ETERNALROMANCE, ETERNALSYNERGY, etc.) and the DOUBLEPULSAR implant. Provides a menu-driven interface for configuring exploits, selecting targets, and deploying payloads.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">FRAMEWORK</span>
+          <span class="tool-tag blue">GUI</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">EXPLOIT</div>
+        <div class="tool-name">ETERNALSYNERGY</div>
+        <div class="tool-aka">SMBv1 RCE</div>
+        <div class="tool-desc">Another SMBv1 remote code execution exploit from the Equation Group. Provides an additional vector for deploying DOUBLEPULSAR. Works alongside ETERNALBLUE and ETERNALROMANCE as part of the NSA's layered SMB exploitation capability.</div>
+        <div class="tool-tags"><span class="tool-tag red">RCE</span><span class="tool-tag red">SMBv1</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">TOOLKIT</div>
+        <div class="tool-name">DANDERSPRITZ</div>
+        <div class="tool-aka">Post-Exploitation Framework (LP)</div>
+        <div class="tool-desc">Full-featured post-exploitation framework with listening post (LP) and implant management. Includes DoubleFeature (diagnostic module), KillSuit (GrayFish persistence), and modules for recon, lateral movement, AV bypass, and data exfiltration. Deployed via DOUBLEPULSAR or PEDDLECHEAP.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">C2</span>
+          <span class="tool-tag purple">LP</span>
+          <span class="tool-tag orange">MODULAR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nsa-firmware" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">FIRMWARE IMPLANT</div>
+        <div class="tool-name">GRAYFISH</div>
+        <div class="tool-aka">KillSuit / Bootkit</div>
+        <div class="tool-desc">The NSA's most sophisticated persistence platform. Entirely registry-resident — no malicious files on disk. Uses a VBR (Volume Boot Record) bootkit to hijack the OS boot sequence through 4-5 decryption layers. Computes SHA-256 hash of the NTFS Object_ID 1000 times to derive a machine-bound AES decryption key. Self-destructs completely if any decryption stage fails.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">BOOTKIT</span>
+          <span class="tool-tag red">REGISTRY-ONLY</span>
+          <span class="tool-tag red">SELF-DESTRUCT</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Persistence</span><span class="tool-detail-value">VBR + Registry (survives OS reinstall)</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Encryption</span><span class="tool-detail-value">AES-256, machine-bound key</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Stealth</span><span class="tool-detail-value">No files on disk, self-destruct on analysis</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Installer</span><span class="tool-detail-value">DOGROUND.exe</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">FIRMWARE IMPLANT</div>
+        <div class="tool-name">IRONCHEF</div>
+        <div class="tool-aka">HDD Firmware Implant</div>
+        <div class="tool-desc">Hard drive firmware-level persistence. Infects the firmware of Western Digital, Seagate, Toshiba, and Samsung hard drives. Survives OS reinstall, disk format, and even low-level format. Can read/write data from within the drive's firmware, completely invisible to the operating system and antivirus.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">FIRMWARE</span>
+          <span class="tool-tag red">HDD</span>
+          <span class="tool-tag red">UNDETECTABLE</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Target</span><span class="tool-detail-value">WD, Seagate, Toshiba, Samsung HDDs</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Persistence</span><span class="tool-detail-value">Drive firmware (survives everything)</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">AIR-GAP TOOL</div>
+        <div class="tool-name">FANNY</div>
+        <div class="tool-aka">USB Air-Gap Bridge</div>
+        <div class="tool-desc">Bidirectional USB covert channel for bridging air-gapped networks. Uses specially crafted USB drives to smuggle data across physically isolated networks. Can exfiltrate data and deliver commands via USB storage devices. Connected to the STUXNET operation — Fanny was used to map air-gapped Iranian nuclear networks before STUXNET was deployed.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">AIR-GAP</span>
+          <span class="tool-tag red">USB</span>
+          <span class="tool-tag orange">STUXNET-LINKED</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">PERSISTENCE</div>
+        <div class="tool-name">DOUBLEFANTASY / TRIPLEFANTASY</div>
+        <div class="tool-aka">Validation Implant</div>
+        <div class="tool-desc">Initial validation implants used to verify target value before deploying full Equation Drug or GrayFish platforms. Conducts environmental keying — checks if the target is of intelligence interest. If not, silently uninstalls itself. Only confirms high-value targets trigger full platform deployment, minimizing operational exposure.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">VALIDATION</span>
+          <span class="tool-tag red">ENV-KEYING</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">EXPLOIT</div>
+        <div class="tool-name">SCHOOLBUS</div>
+        <div class="tool-aka">SATA RF Air-Gap Bridge</div>
+        <div class="tool-desc">Air-gapped network bridge that uses RF leakage from SATA cables to exfiltrate data. Converts the electromagnetic emissions from SATA cables into a covert transmission channel. Data is picked up by a nearby receiver. Completely invisible to the target network — no network connection required.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">AIR-GAP</span>
+          <span class="tool-tag red">RF</span>
+          <span class="tool-tag red">SATA</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">IMPLANT</div>
+        <div class="tool-name">GROK</div>
+        <div class="tool-aka">Keystroke Plugin for GrayFish</div>
+        <div class="tool-desc">Plugin deployed through the GrayFish platform for capturing keystrokes. Operates at kernel level, intercepting keyboard input before it reaches user-mode applications. Provides full keylogging capability with encrypted storage and periodic exfiltration.</div>
+        <div class="tool-tags">
+          <span class="tool-tag red">KEYLOGGER</span>
+          <span class="tool-tag red">KERNEL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="nsa-post" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">POST-EXPLOIT</div>
+        <div class="tool-name">PEDDLECHEAP</div>
+        <div class="tool-aka">Initial Implant Loader</div>
+        <div class="tool-desc">First-stage implant injected into lsass.exe. Bootstraps the full DanderSpritz framework installation. Minimal footprint — only provides enough functionality to connect back, receive commands, and install additional modules. Usually delivered by DOUBLEPULSAR.</div>
+        <div class="tool-tags"><span class="tool-tag red">LOADER</span><span class="tool-tag red">LSASS</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">POST-EXPLOIT</div>
+        <div class="tool-name">UNITEDRAKE</div>
+        <div class="tool-aka">Data Exfiltration Framework</div>
+        <div class="tool-desc">Modular data exfiltration framework supporting multiple channels (HTTP, DNS, ICMP, email). Encrypts and fragments stolen data across multiple packets to evade detection. Supports resume capability for large exfiltration jobs. Can target specific file types and keywords.</div>
+        <div class="tool-tags"><span class="tool-tag red">EXFIL</span><span class="tool-tag orange">MODULAR</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">EXPLOIT</div>
+        <div class="tool-name">NOPEN</div>
+        <div class="tool-aka">Unix RAT</div>
+        <div class="tool-desc">Remote access tool for Unix/Solaris systems. Full RAT with client-server architecture, RC6 encrypted communications. Provides shell access, file transfer, and command execution. Targets SunOS 5.8 and other enterprise Unix systems commonly found in financial and telecommunications infrastructure.</div>
+        <div class="tool-tags"><span class="tool-tag red">RAT</span><span class="tool-tag orange">UNIX</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--red)">IMPLANT</div>
+        <div class="tool-name">SECONDDATE</div>
+        <div class="tool-aka">Multi-Platform Implant</div>
+        <div class="tool-desc">Implant targeting Linux, FreeBSD, Solaris, and JunOS systems. Provides persistent backdoor access with encrypted C2 communications. Can be configured for various persistence mechanisms depending on the target OS.</div>
+        <div class="tool-tags"><span class="tool-tag red">BACKDOOR</span><span class="tool-tag orange">CROSS-PLATFORM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CIA / Vault 7 -->
+<section id="cia">
+  <span class="section-tag cia">CIA / Vault 7</span>
+  <h2 class="section-title">CIA Vault 7 Arsenal</h2>
+  <p class="section-subtitle">WikiLeaks' Vault 7 release exposed the CIA's full cyber weapons development arsenal — 25+ distinct projects covering everything from smart TV surveillance to UEFI rootkits and air-gap jumping USB worms.</p>
+
+  <div class="tabs" id="cia-tabs">
+    <button class="tab active" data-tab="cia-implants">Implants & Persistence</button>
+    <button class="tab" data-tab="cia-airgap">Air-Gap & Physical</button>
+    <button class="tab" data-tab="cia-frameworks">Frameworks & Tools</button>
+  </div>
+
+  <div id="cia-implants" class="tab-content active">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">UEFI ROOTKIT</div>
+        <div class="tool-name">FLUXBABEON</div>
+        <div class="tool-aka">UEFI/BIOS Firmware Rootkit</div>
+        <div class="tool-desc">Infects the SPI flash memory containing UEFI/BIOS firmware — persists through BIOS update, OS reinstall, disk format, and even disk replacement. Operates below the operating system, intercepting the boot chain before any OS security measures load. Can re-infect the OS even after complete cleanup.</div>
+        <div class="tool-tags">
+          <span class="tool-tag blue">UEFI</span>
+          <span class="tool-tag blue">BIOS</span>
+          <span class="tool-tag blue">PERSISTENT</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Persistence</span><span class="tool-detail-value">SPI flash (survives BIOS update)</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Stealth</span><span class="tool-detail-value">Below OS — no AV can detect</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">WINDOWS MALWARE</div>
+        <div class="tool-name">GRASSHOPPER</div>
+        <div class="tool-aka">Modular Windows Implant Builder</div>
+        <div class="tool-desc">Modular, rule-based soft persistence installer for Windows. Builds custom installer executables that pair payloads with persistence modules. Uses a flexible grammar for pre-installation surveys — checks target OS version, antivirus products, and conditions before deploying. Borrowed code from Carberp rootkit, Shamoon, and HiKit.</div>
+        <div class="tool-tags">
+          <span class="tool-tag blue">MODULAR</span>
+          <span class="tool-tag blue">BUILDER</span>
+          <span class="tool-tag orange">AV-BYPASS</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Output</span><span class="tool-detail-value">EXE, DLL, SYS, PIC (x86/x64)</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Persistence</span><span class="tool-detail-value">Multiple modules (Stolen Goods)</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">SMART TV</div>
+        <div class="tool-name">WEEPING ANGEL</div>
+        <div class="tool-aka">Samsung Smart TV Implant</div>
+        <div class="tool-desc">Co-developed with MI5. Infects Samsung F-series Smart TVs via USB stick. Implant enables the TV's built-in microphone for covert audio surveillance while the TV falsely appears to be turned off. Data stored locally or exfiltrated via Wi-Fi to a Live Listening Tool. Installed via Close Access method (physical USB insertion).</div>
+        <div class="tool-tags">
+          <span class="tool-tag blue">SURVEILLANCE</span>
+          <span class="tool-tag blue">IoT</span>
+          <span class="tool-tag orange">MI5-CO-DEV</span>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">MAC ROOTKIT</div>
+        <div class="tool-name">DARK MATTER</div>
+        <div class="tool-aka">Mac Firmware Implants</div>
+        <div class="tool-desc">Suite of tools targeting Apple Mac firmware. Includes boot-level rootkits for both Intel and (potentially) T2-chip Macs. Covers EFI/UEFI firmware persistence. Sub-projects include Sonic Screwdriver and others targeting Apple's Secure Boot chain.</div>
+        <div class="tool-tags"><span class="tool-tag blue">MAC</span><span class="tool-tag blue">EFI</span><span class="tool-tag blue">ROOTKIT</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">ATM MALWARE</div>
+        <div class="tool-name">IMPERFECT AUTUMN</div>
+        <div class="tool-aka">ATM Exploit Chain</div>
+        <div class="tool-desc">Targeted ATM exploit chains for NCR and Diebold ATMs. Allows remote cash dispensing and card skimming. Exploits vulnerabilities in the Windows-based ATM operating systems (XPE) commonly used by these manufacturers.</div>
+        <div class="tool-tags"><span class="tool-tag blue">ATM</span><span class="tool-tag blue">FINANCIAL</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">ROUTER IMPLANT</div>
+        <div class="tool-name">CHERRY BLOSSOM</div>
+        <div class="tool-aka">Wireless Router Surveillance</div>
+        <div class="tool-desc">Wireless router firmware implant framework. Targets home/office routers to intercept and modify network traffic. Can perform man-in-the-middle attacks at the firmware level, redirect traffic, inject content, and monitor all communications passing through the router.</div>
+        <div class="tool-tags"><span class="tool-tag blue">ROUTER</span><span class="tool-tag blue">MITM</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cia-airgap" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">AIR-GAP SUITE</div>
+        <div class="tool-name">BRUTAL KANGAROO</div>
+        <div class="tool-aka">Air-Gap Jumping USB Worm</div>
+        <div class="tool-desc">Full tool suite for compromising air-gapped networks via USB drives. Components: Drifting Deadline (USB infection tool), Shattered Assurance (automated thumbdrive infection server), Shadow (covert C2 network across isolated machines), Broken Promise (exfiltration post-processor). Creates a covert mesh network within the closed environment using shared USB drives as communication bridges.</div>
+        <div class="tool-tags">
+          <span class="tool-tag blue">AIR-GAP</span>
+          <span class="tool-tag blue">USB-WORM</span>
+          <span class="tool-tag blue">MESH-C2</span>
+        </div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Vector</span><span class="tool-detail-value">USB thumbdrive LNK exploit</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Zero-Day</span><span class="tool-detail-value">EZCheese (patched Mar 2015)</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Components</span><span class="tool-detail-value">Drifting Deadline, Shattered Assurance, Shadow, Broken Promise</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">USB DROP</div>
+        <div class="tool-name">PANDEMIC</div>
+        <div class="tool-aka">File Server Implant</div>
+        <div class="tool-desc">Microsoft Windows file server implant. Infects files as they pass through a compromised file server, spreading malware to any client that accesses them. Turns the file server into an infection distribution point without modifying files on disk — infection happens in transit.</div>
+        <div class="tool-tags"><span class="tool-tag blue">FILE-SERVER</span><span class="tool-tag blue">WORM</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">PHYSICAL ACCESS</div>
+        <div class="tool-name">EXPRESS LANE</div>
+        <div class="tool-aka">Biometrics Bypass</div>
+        <div class="tool-desc">Tool for cloning and bypassing biometric authentication systems. Allows operatives to clone fingerprints, bypass iris scanners, and defeat other biometric access controls at target facilities.</div>
+        <div class="tool-tags"><span class="tool-tag blue">BIOMETRICS</span><span class="tool-tag blue">PHYSICAL</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cia-frameworks" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">OBFUSCATION</div>
+        <div class="tool-name">MARBLE FRAMEWORK</div>
+        <div class="tool-aka">Anti-Forensic Obfuscation</div>
+        <div class="tool-desc">Anti-forensic obfuscation framework used to wrap CIA malware in fake signatures. Can mask malware to appear as Russian, Chinese, North Korean, or Iranian-created code. Contains over 600 unique deobfuscation strings. Supports multiple languages for false-flag attribution.</div>
+        <div class="tool-tags"><span class="tool-tag blue">OBFUSCATION</span><span class="tool-tag blue">FALSE-FLAG</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">C2 FRAMEWORK</div>
+        <div class="tool-name">HIVE</div>
+        <div class="tool-aka">Multi-Platform C2 Framework</div>
+        <div class="tool-desc">Multi-platform command and control framework supporting Windows, Mac, and Linux implants. Provides encrypted communications, tasking, data exfiltration, and implant management. Designed for sustained, stealthy operations.</div>
+        <div class="tool-tags"><span class="tool-tag blue">C2</span><span class="tool-tag blue">CROSS-PLATFORM</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent2)">REPORTING</div>
+        <div class="tool-name">SCRIBBLES</div>
+        <div class="tool-aka">Watermarking / Attribution Tool</div>
+        <div class="tool-desc">Steganographic watermarking tool for document tracking. Embeds invisible watermarks in documents to track their origin and trail. If a classified document leaks, the watermark reveals which CIA officer or operation was the source.</div>
+        <div class="tool-tags"><span class="tool-tag blue">FORENSICS</span><span class="tool-tag blue">WATERMARK</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NSO / Pegasus -->
+<section id="nso">
+  <span class="section-tag nso">NSO Group / Pegasus</span>
+  <h2 class="section-title">Pegasus Spyware Ecosystem</h2>
+  <p class="section-subtitle">The most infamous commercial spyware platform. Developed by Israeli NSO Group. Used by governments worldwide to spy on journalists, activists, lawyers, and politicians. Zero-click iMessage exploits. $500K setup + $650K per 10 targets. Annual maintenance 17-22%. Sold to "approved government clients" only.</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">SPYWARE PLATFORM</div>
+      <div class="tool-name">PEGASUS</div>
+      <div class="tool-aka">Full Mobile Surveillance Suite</div>
+      <div class="tool-desc">Complete mobile surveillance platform. Extracts SMS, WhatsApp, Signal, Telegram, Viber, call logs, contacts, photos, GPS location, microphone audio, camera, passwords, browser history. Installed via zero-click exploits (iMessage, WhatsApp). Kernel-level persistence with anti-forensic self-delete. Operates in stealth — no app icon, no suspicious activity visible to the user.</div>
+      <div class="tool-tags">
+        <span class="tool-tag pink">ZERO-CLICK</span>
+        <span class="tool-tag pink">iOS/ANDROID</span>
+        <span class="tool-tag pink">FULL-ACCESS</span>
+      </div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Cost</span><span class="tool-detail-value">$500K setup + $650K per 10 targets</span></div>
+        <div class="tool-detail-item"><span class="tool-detail-label">Annual Fee</span><span class="tool-detail-value">17-22% of system cost</span></div>
+        <div class="tool-detail-item"><span class="tool-detail-label">Status</span><span class="tool-detail-value">US Entity List (Nov 2021), still operational</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">EXPLOIT</div>
+      <div class="tool-name">FORCEDENTRY</div>
+      <div class="tool-aka">CVE-2021-30860 / iMessage 0-Click</div>
+      <div class="tool-desc">Zero-click iMessage exploit targeting Apple's image rendering library (PDF parsing via ImageIO). Circumvents BlastDoor — the iOS 14 security mitigation designed to prevent exactly this type of attack. Used since at least February 2021. Affected iOS, macOS, and WatchOS. No user interaction required — target just receives a message.</div>
+      <div class="tool-tags">
+        <span class="tool-tag pink">ZERO-CLICK</span>
+        <span class="tool-tag pink">iMESSAGE</span>
+        <span class="tool-tag pink">BLASTDOOR-BYPASS</span>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">EXPLOIT VECTORS</div>
+      <div class="tool-name">HEAVEN / EDEN / ERISED</div>
+      <div class="tool-aka">WhatsApp Exploit Chain</div>
+      <div class="tool-desc">Three generations of WhatsApp zero-click exploit vectors: Heaven (used NSO's own WhatsApp Installation Server impersonating official client), Eden (improved version going through WhatsApp relay servers), Erised (final version still using WhatsApp's servers). All delivered Pegasus without any user interaction. Eden/Erised circumvented WhatsApp's 2018 security updates.</div>
+      <div class="tool-tags">
+        <span class="tool-tag pink">WHATSAPP</span>
+        <span class="tool-tag pink">ZERO-CLICK</span>
+        <span class="tool-tag pink">3-GENERATIONS</span>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">MODULE</div>
+      <div class="tool-name">HOMESICK</div>
+      <div class="tool-aka">Anti-Forensic Self-Delete</div>
+      <div class="tool-desc">Self-delete module that erases all traces of Pegasus from the target device. Used after successful implant or when the target is no longer of interest. Wipes logs, system modifications, and the implant itself, leaving no forensic evidence.</div>
+      <div class="tool-tags"><span class="tool-tag pink">ANTI-FORENSIC</span><span class="tool-tag pink">SELF-DELETE</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">COMMUNICATION</div>
+      <div class="tool-name">PHOENIX</div>
+      <div class="tool-aka">SMS-Based C2 Heartbeat</div>
+      <div class="tool-desc">Stealth communication module that uses SMS messages as C2 heartbeat when internet connectivity is cut. Allows Pegasus to receive commands and exfiltrate data via SMS in situations where the target device has no data connection, maintaining operation continuity.</div>
+      <div class="tool-tags"><span class="tool-tag pink">SMS-C2</span><span class="tool-tag pink">OFFLINE-MODE</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">DEPLOYMENT</div>
+      <div class="tool-name">CHRYSAOR</div>
+      <div class="tool-aka">Phishing Campaign Panel</div>
+      <div class="tool-desc">SMS phishing campaign orchestration panel used for deploying Pegasus when zero-click exploits are not available or have been patched. Manages large-scale phishing operations with tailored messages and malicious links.</div>
+      <div class="tool-tags"><span class="tool-tag pink">PHISHING</span><span class="tool-tag pink">SMS</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Russia -->
+<section id="russia">
+  <span class="section-tag russia">Russia / APT Groups</span>
+  <h2 class="section-title">Russian Cyber Operations</h2>
+  <p class="section-subtitle">From the FSB's elite hacking units to GRU military intelligence. Sandworm, APT28, APT29, Turla — operating at the intersection of cyber espionage, critical infrastructure sabotage, and information warfare.</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">ICS SABOTAGE</div>
+      <div class="tool-name">BLACKENERGY / CRASHOVERRIDE / INDUSTROYER</div>
+      <div class="tool-aka">SCADA/ICS Disruptors</div>
+      <div class="tool-desc">Industrial control system malware family. BlackEnergy used against Ukrainian power grid (2015) — 230,000 people without power. CRASHOVERRIDE (2016) — automated, modular ICS attack framework targeting electrical substations. INDUSTROYER (2016) — directly manipulated IEC-101 serial protocols to open circuit breakers. Caused the first-ever cyberattack-induced power outages.</div>
+      <div class="tool-tags">
+        <span class="tool-tag orange">ICS</span>
+        <span class="tool-tag orange">SCADA</span>
+        <span class="tool-tag orange">POWER-GRID</span>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">ESPIONAGE</div>
+      <div class="tool-name">X-AGENT / X-TUNNEL</div>
+      <div class="tool-aka">APT28 / Fancy Bear Cyber Espionage</div>
+      <div class="tool-desc">Cyber espionage platform used by GRU's APT28 (Fancy Bear). X-Agent is the implant that exfiltrates data over encrypted HTTPS tunnels hidden inside traffic of legitimate news sites. X-Tunnel creates encrypted tunnels to route stolen data out of compromised networks. Used in the DNC hack, Olympic doping scandal, and Ukrainian military targeting.</div>
+      <div class="tool-tags">
+        <span class="tool-tag orange">ESPIONAGE</span>
+        <span class="tool-tag orange">HTTPS-C2</span>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">STEALTH C2</div>
+      <div class="tool-name">TURLA HAMMERTOSS / COMCLEANER</div>
+      <div class="tool-aka">Turla / Waterbug C2</div>
+      <div class="tool-desc">Sophisticated C2 infrastructure using legitimate public platforms: Twitter (reads tweets for commands), GitHub (comments on repos for instructions), StackOverflow (edit questions for dead-drop C2). COMCLEANER is a modular backdoor that communicates via these channels. Extremely hard to block — you can't block GitHub or StackOverflow.</div>
+      <div class="tool-tags">
+        <span class="tool-tag orange">SOCIAL-MEDIA-C2</span>
+        <span class="tool-tag orange">STEALTH</span>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">SUPPLY CHAIN</div>
+      <div class="tool-name">DROPPING LIME / KOPILUWAK</div>
+      <div class="tool-aka">WordPress C2 + Satellite Intercept</div>
+      <div class="tool-desc">DROPPING LIME uses compromised WordPress sites as C2 reflectors. KOPILUWAK targets satellite communication infrastructure — compromises NTLite hubs to intercept satellite internet traffic. Particularly effective against military and diplomatic targets in remote areas relying on satellite communications.</div>
+      <div class="tool-tags"><span class="tool-tag orange">SATELLITE</span><span class="tool-tag orange">WORDPRESS-C2</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">USB WORM</div>
+      <div class="tool-name">SNOWYAMBER</div>
+      <div class="tool-aka">Satellite Comms Backdoor</div>
+      <div class="tool-desc">Targets satellite communication infrastructure for persistent backdoor access. Compromises satellite base stations and hub equipment to intercept diplomatic/military communications from hard-to-reach locations.</div>
+      <div class="tool-tags"><span class="tool-tag orange">SATELLITE</span><span class="tool-tag orange">BACKDOOR</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">DATA WIPER</div>
+      <div class="tool-name">NOTPETYA / SHAMOON / WHISPERGATE</div>
+      <div class="tool-aka">Destructive Data Wipers</div>
+      <div class="tool-desc">NOTPETYA ($10B+ damages) masqueraded as ransomware but was purely destructive — overwrote the MBR with a custom loader that encrypted the entire disk. SHAMOON targeted Saudi Aramco (35,000 workstations destroyed). WHISPERGATE targeted Ukrainian organizations. These are not espionage tools — they are wartime weapons for destroying adversary data infrastructure.</div>
+      <div class="tool-tags"><span class="tool-tag orange">WIPER</span><span class="tool-tag orange">DESTRUCTIVE</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- China -->
+<section id="china">
+  <span class="section-tag china">China / PLA</span>
+  <h2 class="section-title">Chinese Cyber Operations</h2>
+  <p class="section-subtitle">PLA Unit 61398, APT1, APT10, Ricochet Chollima — sustained, long-term espionage targeting diplomatic missions, technology firms, and critical infrastructure. Known for supply chain compromises and air-gap exfiltration.</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--yellow)">ESPIONAGE</div>
+      <div class="tool-name">GHOSTNET</div>
+      <div class="tool-aka">Diplomatic Espionage Platform</div>
+      <div class="tool-desc">Sustained espionage operation targeting 100+ diplomatic missions worldwide. Uses Office exploits and custom RATs for initial access. Extracts diplomatic communications, negotiation strategies, and classified documents. Operated from PLA Unit 61398.</div>
+      <div class="tool-tags"><span class="tool-tag yellow">DIPLOMATIC</span><span class="tool-tag yellow">ESPIONAGE</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--yellow)">AIR-GAP EXFILTRATION</div>
+      <div class="tool-name">THROATFYRE</div>
+      <div class="tool-aka">GPU Fan Acoustic Exfiltration</div>
+      <div class="tool-desc">Exfiltrates data from air-gapped systems by modulating GPU fan speed to create acoustic pulses. A nearby smartphone's microphone captures the fan noise pattern and decodes the data. No network connection required — just a compromised computer with a microphone-equipped phone nearby. The ultimate air-gap breaker.</div>
+      <div class="tool-tags">
+        <span class="tool-tag yellow">AIR-GAP</span>
+        <span class="tool-tag yellow">ACOUSTIC</span>
+        <span class="tool-tag yellow">GPU-FAN</span>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--yellow)">SUPPLY CHAIN</div>
+      <div class="tool-name">LOWKEY / MITEPLUG / CRASHOVERRIDE</div>
+      <div class="tool-aka">ICS Supply Chain Implants</div>
+      <div class="tool-desc">Industrial control system implants embedded in legitimate software updates on mirror sites. Compromises the supply chain of industrial software providers to gain access to energy, manufacturing, and infrastructure targets.</div>
+      <div class="tool-tags"><span class="tool-tag yellow">SUPPLY-CHAIN</span><span class="tool-tag yellow">ICS</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--yellow)">RAT</div>
+      <div class="tool-name">EMISSARY / LURID / COMMENT CREW</div>
+      <div class="tool-aka">Persistent RATs</div>
+      <div class="tool-desc">Custom RATs embedded in legitimate software updates. Emissary and Lurid target diplomatic and technology organizations. Comment Crew RAT uses blog comment sections as dead-drop C2 channels — posts encrypted commands in comments on legitimate blogs, making C2 traffic indistinguishable from normal web browsing.</div>
+      <div class="tool-tags"><span class="tool-tag yellow">RAT</span><span class="tool-tag yellow">DEAD-DROP-C2</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Commercial Spyware -->
+<section id="spyware">
+  <span class="section-tag broker">Commercial Spyware</span>
+  <h2 class="section-title">Commercial Surveillance Vendors</h2>
+  <p class="section-subtitle">A multi-billion dollar gray market. Private companies develop zero-click exploits and sell to governments. Pegasus is just the tip of the iceberg. Here are the major players and their tools.</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--accent)">GREECE / CYPROT</div>
+      <div class="tool-name">PREDATOR</div>
+      <div class="tool-aka">Intellexa / Cytrox</div>
+      <div class="tool-desc">Android/iOS spyware delivered via CDN poisoning — compromised CDN nodes (Akamai/CloudFront edge Pops) used for downgrade attacks. Includes ALIEN bootkit for Android that modifies initramfs, surviving factory reset. Sold to authoritarian governments. US Entity List (Jul 2023), Treasury sanctions.</div>
+      <div class="tool-tags">
+        <span class="tool-tag green">CDN-POISON</span>
+        <span class="tool-tag green">BOOTKIT</span>
+        <span class="tool-tag green">SANCTIONED</span>
+      </div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Cost</span><span class="tool-detail-value">EUR 8-13.6M per deployment</span></div>
+        <div class="tool-detail-item"><span class="tool-detail-label">Status</span><span class="tool-detail-value">US-sanctioned, still operational</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--accent)">ISRAEL</div>
+      <div class="tool-name">DEVILSTONGUE</div>
+      <div class="tool-aka">Candiru Spyware</div>
+      <div class="tool-desc">Full mobile spyware platform from Israeli firm Candiru. Uses DNS-over-HTTPS exploitation to exfiltrate via DoH (avoiding network detection). Server-side watering holes on compromised Apache/Nginx to deliver zero-click browser exploits. Chrome zero-days sold to governments (not CVE'd). US Entity List (Nov 2021).</div>
+      <div class="tool-tags"><span class="tool-tag green">DoH-EXFIL</span><span class="tool-tag green">WATERING-HOLE</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--accent)">ISRAEL</div>
+      <div class="tool-name">GRAPHITE</div>
+      <div class="tool-aka">Paragon Solutions</div>
+      <div class="tool-desc">Modern spyware platform from Israeli firm Paragon. Used a January 2025 WhatsApp zero-click campaign targeting ~90 accounts (journalists). Evaded detection despite company's "responsible" ethical framework. Targets WhatsApp and other encrypted messaging platforms.</div>
+      <div class="tool-tags"><span class="tool-tag green">WHATSAPP</span><span class="tool-tag green">ZERO-CLICK</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--accent)">ITALY</div>
+      <div class="tool-name">HELICONIA</div>
+      <div class="tool-aka">Variston IT</div>
+      <div class="tool-desc">Exploit framework discovered by Google TAG (Nov 2022). Targets Chrome, Firefox, and Windows Defender with custom exploits. Sold commercially to governments.</div>
+      <div class="tool-tags"><span class="tool-tag green">CHROME</span><span class="tool-tag green">FIREFOX</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--accent)">ITALY</div>
+      <div class="tool-name">HERMIT</div>
+      <div class="tool-aka">RCS Lab</div>
+      <div class="tool-desc">Commercial spyware platform. Full remote control: webcam, mic, screen, GPS, keylogging, file exfil. Sold to governments and law enforcement. Android and iOS implants.</div>
+      <div class="tool-tags"><span class="tool-tag green">FULL-RAT</span><span class="tool-tag green">LAWFUL-INTERCEPT</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--accent)">ISRAEL</div>
+      <div class="tool-name">REIGN</div>
+      <div class="tool-aka">QuaDream</div>
+      <div class="tool-desc">Pegasus competitor. Involved in iOS zero-click exploits. Exposed by Citizen Lab and Microsoft in 2023. Company shut down in April 2023 after public exposure. Demonstrates how fragile the commercial spyware market is when operations are exposed.</div>
+      <div class="tool-tags"><span class="tool-tag green">iOS</span><span class="tool-tag green">SHUT-DOWN</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- The Zero-Day Market -->
+<section id="market">
+  <span class="section-tag broker">The Zero-Day Market</span>
+  <h2 class="section-title">The Exploit Broker Economy</h2>
+  <p class="section-subtitle">A structured, multi-billion dollar global market operating across three tiers: White (bug bounties), Gray (brokers selling to governments), and Black (criminal underground). Prices inflating at 44% annually. Buyers are almost exclusively nation-states.</p>
+
+  <div class="tabs" id="market-tabs">
+    <button class="tab active" data-tab="market-prices">Current Price List</button>
+    <button class="tab" data-tab="market-brokers">Brokers & Players</button>
+    <button class="tab" data-tab="market-dark">Dark Web Markets</button>
+  </div>
+
+  <div id="market-prices" class="tab-content active">
+    <div class="market-grid">
+      <div class="market-card">
+        <div class="market-price">$5-7M</div>
+        <div class="market-label">iOS Zero-Click Full Chain (Crowdfense)</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$5M</div>
+        <div class="market-label">Android Zero-Click Full Chain (Crowdfense)</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$20M</div>
+        <div class="market-label">iOS/Android Zero-Click Full Chain (Operation Zero, 2024 peak)</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$3-5M</div>
+        <div class="market-label">WhatsApp / iMessage RCE (Crowdfense)</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$500K-3.5M</div>
+        <div class="market-label">Chrome / Safari RCE + Sandbox Escape</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$30M</div>
+        <div class="market-label">Crowdfense 2024 Exploit Acquisition Budget</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$1-2.5M</div>
+        <div class="market-label">Windows / macOS / Linux LPE</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$400K-1.5M</div>
+        <div class="market-label">Signal / Telegram / Messenger Exploits</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="market-brokers" class="tab-content">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Broker</th>
+            <th>Based</th>
+            <th>Top Payout</th>
+            <th>Clients</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="highlight">Crowdfense</td>
+            <td>Dubai</td>
+            <td>$7M</td>
+            <td>Government agencies</td>
+            <td>Active ($30M budget)</td>
+          </tr>
+          <tr>
+            <td class="highlight">Zerodium</td>
+            <td>Washington DC</td>
+            <td>$2.5M</td>
+            <td>NATO governments</td>
+            <td>Inactive (2025)</td>
+          </tr>
+          <tr>
+            <td class="highlight">Operation Zero</td>
+            <td>St. Petersburg, Russia</td>
+            <td>$20M</td>
+            <td>Russian government only</td>
+            <td>US-sanctioned (2026)</td>
+          </tr>
+          <tr>
+            <td class="highlight">Zero Day Initiative (ZDI)</td>
+            <td>USA (Trend Micro)</td>
+            <td>$1M</td>
+            <td>Vendors (responsible disclosure)</td>
+            <td>Active (white market)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="market-dark" class="tab-content">
+    <p style="color: var(--text2); margin-bottom: 24px;">Dark web marketplaces where exploits, access, and tools are traded. Prices from 2024-2025 analysis of 20,000+ listings across major forums.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Marketplace</th>
+            <th>Type</th>
+            <th>Notable Listings</th>
+            <th>Price Range</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>RAMP Forum</td><td>Russian RaaS</td><td>LockBit 3.0, Cobalt Strike 4.8, Conti</td><td>$1K-$100K</td></tr>
+          <tr><td>Exploit.in</td><td>Exploit Market</td><td>VPN RCE 0-days, Office exploits</td><td>$30K-$100K</td></tr>
+          <tr><td>XSS.is</td><td>Russian Forum</td><td>Initial access, RATs, stealers</td><td>$500-$5K</td></tr>
+          <tr><td>DarkForums</td><td>Hybrid Marketplace</td><td>Breach data, VPN access, IAB</td><td>$500-$15K</td></tr>
+          <tr><td>Telegram Channels</td><td>Private Groups</td><td>C2 panels, crypters, loaders</td><td>$70-$25K</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text2); font-size: 0.85rem; margin-top: 16px;">Zero-day exploits represent 32% of all dark web vulnerability listings, with 31% priced above $20,000. Premium exploits reach multi-million dollar valuations in private channels. Corporate access credentials trade for $500-$3,000 on average.</p>
+  </div>
+</section>
+
+<!-- Acquisition -->
+<section id="acquisition">
+  <span class="section-tag broker">Black Market Acquisition</span>
+  <h2 class="section-title">How to Buy / Acquire These Tools</h2>
+  <p class="section-subtitle">The tools above exist across three acquisition tiers. Understanding the channels, pricing, and risks of each.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Risk</th>
+          <th>Cost</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Exploit Brokers (Crowdfense)</td>
+          <td>Low (gray market)</td>
+          <td>$1M-$7M</td>
+          <td>Requires government/vetted buyer status. Semi-public pricing. Crowdfense publishes price list openly. Zerodium now defunct.</td>
+        </tr>
+        <tr>
+          <td>Operation Zero (Russia)</td>
+          <td>US-sanctioned</td>
+          <td>$2.5M-$20M</td>
+          <td>Sells only to Russian government and orgs. US-sanctioned (Feb 2026). Used stolen US exploits. Contact via opzero.ru.</td>
+        </tr>
+        <tr>
+          <td>Initial Access Brokers (IABs)</td>
+          <td>Medium</td>
+          <td>$500-$3K</td>
+          <td>Sell VPN/RDP/SSH access to organizations. Average price $2,047. 58% under $1,000. Found on XSS, Exploit, RAMP, DarkForums.</td>
+        </tr>
+        <tr>
+          <td>Dark Web Forums</td>
+          <td>High</td>
+          <td>$500-$100K</td>
+          <td>RAMP, Exploit.in, XSS.is. Require vouched reputation. Escrow services charge 4%. Telegram private groups for premium tools.</td>
+        </tr>
+        <tr>
+          <td>Telegram Private Channels</td>
+          <td>Medium-High</td>
+          <td>$1K-$25K</td>
+          <td>Privately-invite channels. FUD crypters ($2K/month), Cobalt Strike cracked ($5K), botnets ($25K). Payment in crypto.</td>
+        </tr>
+        <tr>
+          <td>US Government Contractors</td>
+          <td>Low-est risk</td>
+          <td>$10M+</td>
+          <td>L3Harris, Raytheon, Northrop Grumman. Official Zero-Day acquisition programs (Crowdfense). Requires US Person clearance.</td>
+        </tr>
+        <tr>
+          <td>Insider Theft</td>
+          <td>EXTREME</td>
+          <td>$1.3M-$50M</td>
+          <td>Peter Williams case: stole 8 exploits from L3Harris, sold to Operation Zero for $1.3M in crypto. 87 months federal prison.</td>
+        </tr>
+        <tr>
+          <td>Leaked/Dumped Tools</td>
+          <td>Medium</td>
+          <td>Free</td>
+          <td>Shadow Brokers (Equation Group), Vault 7 (CIA). Archived on GitHub, Mega. Turnkey weaponized exploits. ETERNALBLUE launched WannaCry.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top: 32px; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px;">
+    <h3 style="margin-bottom: 16px; color: var(--accent);">&#x26A0; Historical Case: How Peter Williams Stole $50M Worth of US Gov Exploits</h3>
+    <p style="color: var(--text2); line-height: 1.7;">Peter Williams, 39, Australian national, former General Manager at Trenchant (L3Harris subsidiary). Over 3 years (2022-2025), he stole 8 zero-day exploits built exclusively for US government use. He sold them for $1.3M in cryptocurrency to Operation Zero (the sanctioned Russian broker). The Justice Department estimated $35M in losses. Williams was sentenced to 87 months federal prison. The stolen exploits end up being used against "numerous unsuspecting victims" according to prosecutors. This case demonstrates the real-world pipeline: US defense contractor → insider theft → Russian broker → offensive operations against US interests.</p>
+  </div>
+
+  <p style="color: var(--text2); margin-top: 16px; font-size: 0.85rem;">Most zero-day exploit transactions use cryptocurrency (BTC/XMR) and encrypted communications (Signal/Session/Wire). Dark web forum accounts typically require vouches from existing members and have limited registration periods.</p>
+</section>
+
+<!-- Info Box -->
+<section>
+  <span class="section-tag broker">Critical Context</span>
+  <h2 class="section-title">The Cyber Arms Race</h2>
+  <p class="section-subtitle">Understanding the dynamics of this ecosystem.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;">
+    <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px;">
+      <h3 style="color: var(--accent); margin-bottom: 12px;">44% Annual Inflation</h3>
+      <p style="color: var(--text2); font-size: 0.9rem; line-height: 1.6;">Zero-day exploit prices have been inflating at 44% per year for a decade. A $1M exploit in 2015 costs $7M+ today. Driven by platform hardening (Apple/Google security improvements) and nation-state demand outstripping supply.</p>
+    </div>
+
+    <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px;">
+      <h3 style="color: var(--accent); margin-bottom: 12px;">Zero-Click is King</h3>
+      <p style="color: var(--text2); font-size: 0.9rem; line-height: 1.6;">Exploits requiring user interaction (one-click) lose 60-80% of value. Zero-click exploits that work against iMessage/WhatsApp without any target action command the highest premiums. Physical-access exploits are discounted heavily.</p>
+    </div>
+
+    <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px;">
+      <h3 style="color: var(--accent); margin-bottom: 12px;">Shelf Life Collapse</h3>
+      <p style="color: var(--text2); font-size: 0.9rem; line-height: 1.6;">High-value exploits now have median shelf life under 90 days (2025). Vendors patch faster. Brokers are shifting to subscription-based exploit services. A zero-day purchased today may be worthless in 3 months.</p>
+    </div>
+
+    <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px;">
+      <h3 style="color: var(--accent); margin-bottom: 12px;">The VEP Failure</h3>
+      <p style="color: var(--text2); font-size: 0.9rem; line-height: 1.6;">US Vulnerability Equities Process (VEP) — NSA disclosed only 58% of vulnerabilities acquired in 2024. 42% were retained for offensive use. When the NSA retains exploits instead of disclosing, those exploits remain in the wild, available for theft, leakage, or sale.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p><strong>Nation-State Cyber Weapons Arsenal</strong> &mdash; Intelligence Dossier</p>
+    <p style="margin-top: 8px;">Research compiled from: WikiLeaks Vault 7, Shadow Brokers leaks, Citizen Lab, Kaspersky, Crowdfense, Zerodium, Operation Zero, US Treasury OFAC, TechCrunch, SecurityWeek, BleepingComputer, Rapid7, Check Point Research</p>
+    <p style="margin-top: 12px;">This is an educational intelligence reference. All information derived from publicly available sources, leaks, court documents, and security research publications.</p>
+  </div>
+</footer>
+
+<script>
+// Matrix Rain Effect
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = '0123456789ABCDEF';
+const fontSize = 12;
+const columns = canvas.width / fontSize;
+const drops = Array.from({length: columns}, () => 0);
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(10, 14, 23, 0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00f5d4';
+  ctx.font = fontSize + 'px JetBrains Mono, monospace';
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillStyle = Math.random() > 0.98 ? '#00f5d4' : 'rgba(0, 245, 212, 0.3)';
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+
+setInterval(drawMatrix, 50);
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// Tabs
+document.querySelectorAll('.tabs').forEach(tabGroup => {
+  tabGroup.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const container = tab.closest('section');
+      tabGroup.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+});
+
+// Navbar show on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > window.innerHeight * 0.8) {
+    nav.style.display = 'block';
+  } else {
+    nav.style.display = 'none';
+  }
+});
+</script>
+
+</body>
+</html>
