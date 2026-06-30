@@ -462,7 +462,514 @@ Custom RATs embedded in legitimate software updates. Once a user downloads a tro
 
 ---
 
-## 6. COMMERCIAL SPYWARE VENDORS
+## 6. NORTH KOREA / LAZARUS GROUP (HIDDEN COBRA)
+
+The **Lazarus Group** (aka APT38, HIDDEN COBRA) is North Korea's premier cyber warfare unit — operating a "malware factory" producing samples via multiple independent conveyors. Responsible for the Sony Pictures hack (2014), Bangladesh Bank heist ($81M), WannaCry ($4B), and DarkSeoul. Operates since at least 2009. Attributed to **Bureau 121** (Reconnaissance General Bureau).
+
+### How Lazaraus Operates — The Factory Model
+
+Lazarus maintains a multi-generational malware arsenal with shared codebases spanning 15+ years. Code reuse connects Brambul (2009) → Joanap → KorDllBot → Destover → Duuzer → WannaCry (2017). They use:
+1. **Stage 1** — Rudimentary backdoors via spear-phishing (password-protected ZIP, hardcoded pw `Bb102@j...t3hg`)
+2. **Stage 2** — If target is interesting, deploy advanced code wrapped in encrypted DLL loaders
+3. **Stage 3** — Custom packers, RC4 encryption, registry-hived payloads
+4. **Destruction** — MBR wipers + Eldos RawDisk driver for physical disk overwrite
+
+### BRAVBUL / JOANAP (SMB Worm + P2P Backdoor)
+
+| Tool | Type | How It Works | What You Can Do | Black Market |
+|------|------|-------------|-----------------|--------------|
+| **Brambul** | SMB worm | Brute-force attack on port 445/TCP using hardcoded password list (`"123123"`, `"abc123"`, `"computer"`, `"iloveyou"`, `"login"`, `"password"`). On success, creates net share to C: drive. Sends victim credentials to hardcoded email via Google SMTP. | Gain initial access to Windows networks via weak SMB passwords. Enables lateral movement and additional payload drops. | Gov-only. Available via leaked samples on GitHub from Operation Blockbuster |
+| **Joanap** | P2P backdoor | Registered as service `scardprv.dll` (SmartCard Protector). RC4-encrypted P2P C2 — infected machines talk to each other. Commands: open backdoor, send specific files, save/delete files, download/run executables, start/kill processes. | Full remote control. Steal files, run commands, pivot through infected peers. Peer-to-peer C2 makes takedown nearly impossible. | Gov-only |
+
+### DESTROVER (Sony Pictures 2014)
+
+**How it works step-by-step:**
+1. Spear-phishing email with malicious attachment delivered to Sony employees
+2. Dropper (password-protected ZIP with pattern `"MYRES..."`) extracts Destover components
+3. Custom Mimikatz-like tool harvests domain admin credentials
+4. **Lateral movement:** SMB/WMI/PsExec — spreads to 3,062 of Sony's 6,797 workstations + 837 of 1,555 servers
+5. **Destruction phase:**
+   - Installs Eldos RawDisk driver (signed kernel driver for raw disk access)
+   - Opens handle: `\\.\ElRawDisk\??\PhysicalDrive0#<LICENSE_KEY>`
+   - Overwrites MBR with custom bootloader displaying "This is just a warning..."
+   - Wipes files on all drives using RawDisk IOCTLs
+   - Corrupts partition tables
+6. **Data exfiltration:** Steals 100TB+ of data before wiping
+
+**What you can do:** Destroy an entire organization's IT infrastructure, steal corporate intelligence, wipe forensic evidence. Sony lost 3,062 workstations + 837 servers permanently.
+
+**Black market:** NOT available for sale. Leaked samples exist in Operation Blockbuster archives. Government weapon only.
+
+### DARKSEOUL (2013 — 32,000 Machines Wiped)
+
+**How it works:**
+1. Long-term espionage via Operation Troy (2009-2012) — recon and data exfiltration
+2. IRC-controlled botnet (XwDoor/Keydoor family, earliest sample Jan 2009)
+3. Prioxer backdoor installed on target networks
+4. **March 20, 2013 14:00 KST** — simultaneous activation:
+   - MBR overwrite on 32,000 machines
+   - Boot sector corruption
+   - Target: MBC, YTN (broadcasters), Shinhan Bank, Nonghyup Bank, Jeju Bank
+5. Three South Korean banks + two broadcasters crippled simultaneously
+
+**Market:** Gov-only. DarkSeoul malware variants leaked through security research publications.
+
+### WANNACRY (2017 — $4B Damages)
+
+Attributed to Lazarus subgroup **Bluenoroff** (aka APT38). Kaspersky found code overlap: WannaCry's SMB module shared code with Brambul (2009), Joanap, and DeltaAlfa — all Lazarus tools.
+
+**How WannaCry worked technically:**
+1. **Delivery:** Deployed via ETERNALBLUE (NSA exploit leaked by Shadow Brokers — not built by Lazarus)
+2. **DoublePulsar** implanted as backdoor
+3. **Encryption:** AES-128 per-file with RSA-2048 key wrapping
+4. **Propagation:** SMB worm — self-spreading without human action
+5. **Kill switch:** Hardcoded domain `iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com` — researcher registered it, stopping the worm
+6. **Impact:** 200,000+ systems in 150 countries in 72 hours
+
+**Black market:** WannaCry source code and builder leaked and traded on underground forums. Active variants still exist. Estimated $500-$5K on dark web for modified builders.
+
+---
+
+## 7. IRANIAN CYBER OPERATIONS (APT33 / APT34 / APT35)
+
+Iran operates several state-sponsored cyber units. Their evolution: from basic website defacements (2009-2012) → destructive disk wipers (2012-2019) → cross-platform file-level destruction (2020-2022) → identity weaponization via living-off-the-land (2023-2026).
+
+### SHAMOON 1/2/3 (Disttrack — 2012, 2016, 2018)
+
+The most famous Iranian wiper. Targets Saudi Arabia primarily (Saudi Aramco 2012: 35,000 workstations).
+
+**How Shamoon 1 works (step-by-step):**
+1. **Delivery:** Spear-phishing → dropper extracts three components: `DrvLoader.exe`, `ElRawDisk.sys`, `Main.exe`
+2. **Driver installation:** `ElRawDisk.sys` (signed Eldos RawDisk driver) installed via Service Control Manager (`sc.exe`)
+3. **Device handle:** Opens `\\.\ElRawDisk\??\PhysicalDrive0#<LICENSE_KEY>` 
+4. **License bypass:** System date changed to August 2012 (trial license exploit)
+5. **IOCTL call:** Uses `FSCTL_GET_RETRIEVAL_POINTERS` to locate physical disk sectors
+6. **Overwrite:** Writes garbage data over MBR + critical files, then system image
+7. **Display:** Burning US flag image shown after reboot (Shamoon 1) / Ukraine flag (Shamoon 2)
+
+**Shamoon 2 (2016):** Same technique, updated license key, added phone-home reporting module. Target: Saudi Aramco, RasGas.
+
+**Shamoon 3 (2018):** Same technique. Target: Saipem (Italian oil & gas). ~300 servers + 100 PCs wiped.
+
+**What you can do with Shamoon:** Permanently destroy an organization's entire computing infrastructure by overwriting physical disk sectors. Requires kernel-level access (RawDisk driver). Data is unrecoverable.
+
+**Black market:** NOT available for purchase. Custom Iranian government weapon. RawDisk driver (legitimate signed binary) is available for $500-$2K; Shamoon malware itself is not sold.
+
+### ZEROCLEARE / DUSTMAN (2019 — Energy Sector)
+
+**Improvement over Shamoon:**
+1. Uses **unsigned** ElRawDisk driver loaded via Turla Driver Loader (TDL) — exploits signed VBoxDrv driver vulnerability to bypass Driver Signature Enforcement
+2. Single executable (vs Shamoon's multi-file)
+3. Overwrites volumes with `0x55` or text message
+4. **Ultimate attack chain:** VPN appliance zero-day → VPN server compromise → Domain admin theft → Deploy via AV management console via PsExec → Simultaneous wipe of all systems
+
+**Black market:** Not available. Iranian government weapon.
+
+### APT33 CUSTOM TOOLS
+
+| Tool | Type | How It Works | What You Can Do | Market |
+|------|------|-------------|-----------------|--------|
+| **TURNEDUP** | Backdoor | File upload/download, reverse shell (cmd.exe), screenshot, system info. Delivered via DROPSHOT. Early Bird APC injection into rundll32.exe. Registry persistence. | Full remote control of Windows targets | Gov-only |
+| **SHAPESHIFT / STONEDRILL** | Backdoor + Wiper | Dual-purpose. Backdoor mode: full RAT. Wiper mode: MBR clear + file delete on all volumes. Farsi language artifacts. Anti-emulation (sleep loops, API call sequence check). | Remote control OR total system destruction | Gov-only |
+| **DROPSHOT** | Dropper | Drops and launches TURNEDUP or SHAPESHIFT. Anti-emulation via sleep loops + VBScript self-deletion. Password-protected payloads. | Deploy APT33 payloads on target | Gov-only |
+| **POWERTON** | PowerShell implant | Fully PowerShell-based. Encrypted C2. Multiple persistence (scheduled tasks, WMI, Registry). Mimikatz integration for hash dumps. | Stealthy PowerShell backdoor — fileless | Gov-only |
+| **Tickler** | Multi-stage backdoor | Password spray → hijack educational accounts → create Azure subscriptions → deploy Stage 1 C2 → Stage 2 trojan dropper → SMB lateral movement → deploy RMM tools → AD snapshot theft. Azure-based C2 (`azurewebsites.net`). | Cloud-based espionage with no traditional infrastructure | Gov-only |
+
+### APT34 / OILRIG TOOLS
+
+| Tool | Type | How It Works | What You Can Do | Market |
+|------|------|-------------|-----------------|--------|
+| **SideTwist** | C backdoor | C2 via HTTP GET/POST on 443 (fallback 80). Commands: shell (101), download (102), upload (103), shell dup (104). Mersenne Twister PRNG encryption + Base64. Scheduled task `SystemFailureReporter` every 5min. Exits after one command. | Stealthy single-command backdoor — minimal footprint | Gov-only |
+| **TwoFace** | ASPX web shell | Loader + embedded encrypted payload tested 22 iterations to reach 0 AV detection. Decrypted in memory. Password authentication. File mgmt, cmd exec, SQL queries, network scanning. | Full IIS server compromise, persistent foothold | Gov-only |
+| **OilRig / Helminth** | Modular backdoor | DNS tunneling C2 (TONEDEAF). AES-encrypted HTTP/S. Credential harvesters. LOTL: PowerShell, WMI, native Windows utils. Cloud-based C2 (Azure, VPS). | Long-term espionage in government/financial targets | Gov-only |
+
+---
+
+## 8. SUPPLY CHAIN ATTACKS
+
+### SOLARWINDS — SUNBURST / SUPERNOVA (2020)
+
+**Scale:** 18,000 customers received trojanized Orion update. Active compromise of ~100 high-value targets (US govt, Fortune 500, security vendors like FireEye).
+
+**Attribution:** Russian SVR (APT29 / Cozy Bear / UNC2452)
+
+**How SUNBURST works (step-by-step):**
+1. **Build system compromise:** Attackers infiltrated SolarWinds build infrastructure
+2. **Code injection:** 4,000 lines of malicious code inserted into `SolarWinds.Orion.Core.BusinessLayer.dll`
+3. **Trigger:** Injected into `RefreshInternal()` in `InventoryManager` class, called via `CoreBusinessLayerPlugin.Start()` → scheduled as Background Inventory
+4. **Hibernation:** Malware sleeps for 2 weeks after installation — no C2 contact, no suspicious behavior
+5. **Blocklist check:** Only executes if no forensic/AV analysis tools detected
+6. **C2 Phase 1 (DNS — Passive):** DGA domain generation based on timestamp. DNS CNAME response from coordinator contains instructions (continue, halt, switch to active mode)
+7. **C2 Phase 2 (HTTP — Active):** HTTPS to final C2 (certificate validation disabled). Mimics Orion Improvement Program (OIP) protocol with ~17 legitimate-looking commands
+8. **Capabilities:** Transfer files, execute binaries, profile system, reboot, disable/enable services
+9. **Exfiltration:** Blended in with legitimate Orion telemetry — indistinguishable from normal traffic
+10. **Persistence:** Disguised as legitimate SolarWinds plugin; state stored in plugin config files
+
+**What you can do:** Compromise ANY organization running SolarWinds Orion. Maintain persistent, stealthy backdoor on government networks, Fortune 500 companies, and security vendors. Exfiltrate data camouflaged in legitimate telemetry.
+
+**SUPERNOVA (potentially unrelated):** Trojanized `app_web_logoimagehandler.ashx.b6031896.dll` — fileless .NET code execution via 4 new HTTP parameters. Client sends valid .NET code → compiled in-memory → executed immediately.
+
+**Black market:** NOT available. SVR government weapon only. Source code never leaked.
+
+---
+### CCLEANER SUPPLY CHAIN (2017)
+
+**Scale:** 2.27M downloads of trojanized CCleaner v5.33.6162 / CCleaner Cloud v1.07.3191
+
+**Attribution:** Russian-linked group (potentially APT29 precursor)
+
+**How it works:**
+1. **Build system compromise:** Piriform's development environment breached (post-Avast acquisition)
+2. **Stage 1** (in CCleaner.exe): Modified `__scrt_get_dyn_tls_init_callback` to redirect execution. Decrypts embedded blob → PIC PE loader + DLL. API resolution at runtime. Creates thread, sets up ROP chain for cleanup. Collects: computer name, volume serial, OS version, installed AV. Exfiltrates via HTTPS POST to hardcoded C2 (with DGA fallback)
+3. **Stage 2** (GeeSetup_x86.dll — only delivered to target-matching victims): Drops trojanized binary (`TSMSISrv.dll` for x86, `EFACli64.dll` for x64). Writes encoded PE to Registry: `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WbemPerf\001`. Trojanized binary decodes and executes in-memory.
+4. **Stage 3** (theoretical — never deployed in wild): In-memory PE downloaded from IP stego'd in GitHub/WordPress.com search results
+5. **Kill switch:** C2 checked for `%TEMP%\spf` — if present, payload terminates
+
+**C2 Database:** MySQL server contained info on ~700,000 infected machines. Only subset received Stage 2.
+
+**Black market:** NOT for sale. Source code was analyzed and published by Talos/Cisco for research.
+
+---
+### NOTPETYA via M.E.Doc (2017)
+
+**Scale:** $10B+ damages. Maersk ($300M), Merck, FedEx, Saint-Gobain, WPP crippled.
+
+**Attribution:** GRU Sandworm.
+
+**How supply chain vector worked:**
+1. Attackers compromised M.E.Doc (Ukrainian tax accounting software company with mandatory government use)
+2. Stole admin credentials to M.E.Doc update server
+3. Modified `nginx.conf` to proxy update requests to attacker server
+4. Backdoor code added to `ZvitPublishedObjects.dll` — polled attacker server every 2 minutes via `MeCom` object
+5. Backdoor delivered NotPetya through legitimate M.E.Doc update mechanism
+
+**NotPetya technical propagation:**
+1. Runs as DLL (`rundll32.exe` with exported function)
+2. **Credential harvesting:** WDigest extraction + Mimikatz LSASS dump → plaintext passwords + NTLM hashes
+3. **Lateral movement (simultaneous multi-threaded):**
+   - PsExec (renamed `dllhost.dat`) → `\\HOST\admin$`
+   - WMIC → remote process creation
+   - EternalBlue/ETERNALROMANCE (CVE-2017-0144/0145) — ONLY if Kaspersky AV detected
+   - 44+ hardcoded credentials in PE (32KB patch area)
+4. **Destruction:** Encrypts MFT entries → overwrites MBR with custom bootloader → Salsa20 + RSA-2048 file encryption
+5. **Fake ransomware:** Bitcoin payment address unmonitored — attacker never intended to provide decryption
+6. **Deception:** Displays fake CHKDSK screen during MBR overwrite
+
+**What you can do:** Destroy every Windows system in a global organization. No recovery possible. The "ransomware" is purely destructive.
+
+**Black market:** NOT available. GRU government weapon.
+
+---
+
+## 9. ADDITIONAL RUSSIAN CYBER WEAPONS
+
+### SNAKE MALWARE (FSB Center 16 / Turla)
+
+The most sophisticated Russian espionage implant. P2P mesh network of compromised machines worldwide.
+
+**How it works:**
+1. **Architecture:** Peer-to-peer network where infected machines act as relays for disguised traffic
+2. **Kernel module:** Can function as server without opening any ports — completely stealth network presence
+3. **Protocol stack (4 layers):**
+   - Raw TCP/UDP, HTTP, SMTP, DNS, ICMP, raw IP
+   - `enc` layer: Session encryption via Diffie-Hellman + pre-shared key (PSK)
+   - Application layer: End-to-end encryption between operator and target
+4. **Persistence:** Queue File stores per-implant state including `ustart` authentication value
+5. **C2:** Custom HTTP + raw TCP for bulk data. Authentication via `ustart` mechanism distinguishing Snake from legitimate web traffic
+
+**Capabilities:**
+- Full keylogging
+- File exfiltration (any file, any size)
+- Screen capture
+- Remote code execution
+- Use victim as relay hop (pivot through their network undetected)
+- Survives OS reinstall via kernel persistence
+
+**Platforms:** Windows (kernel module), Linux variants confirmed
+
+**Black market:** NOT available. FSB Center 16 government weapon. One of the most protected Russian tools. Never leaked.
+
+### OLYMPIC DESTROYER (2018 Winter Olympics)
+
+**Target:** PyeongChang Winter Olympics opening ceremony — destroyed networks, ticket systems, broadcaster systems, Wi-Fi.
+
+**How it works:**
+1. **Dropper** with two required arguments
+2. **Credential stealing:** Browser stealer (IE/Firefox/Chrome — parses registry + SQLite DB). LSASS dump (Mimikatz, 18.5% code overlap with APT3/China tools — false flag)
+3. **32KB credential patch** at offset `0x26F1A-0x2EF1A` — 44 unique credentials observed
+4. **Lateral movement:** PsExec (admin shares) + WMI + EternalBlue/EternalRomance fallback
+5. **Destruction:** MBR overwrite → VBR wipe → file corruption → Windows recovery disabled
+6. **False flags:** Korean characters in credentials (misdirection). Code overlap with Chinese APT3 (intentional)
+
+**Black market:** NOT available. GRU Sandworm only.
+
+### CADDY WIPER (Ukraine 2022)
+
+Deployed by Sandworm during Russian invasion of Ukraine. Fast multi-threaded Windows disk wiper. Overwrites critical system files + destroys partition tables. No ransomware component — pure destruction.
+
+### ACIDRAIN (VIA Satellite Modem Wiper — KA-SAT 2022)
+
+**Target:** Viasat KA-SAT satellite broadband modems — 28,000+ modems permanently bricked. Triggered simultaneously with Russian invasion of Ukraine.
+
+**How it works (technical):**
+1. **MIPS ELF binary** (32-bit, big-endian) for embedded Linux
+2. **Runs as root:**
+   - Recursively finds all files, overwrites with `0xFFFFFFFF` via 4-byte integers
+   - Iterates `/dev/mtdblock0` through `/dev/mtdblock99` (flash storage)
+   - Uses IOCTLs: `MEMGETINFO`, `MEMUNLOCK`, `MEMERASE`, `MEMWRITEOOB` — hardware flash operations
+   - Calls `fsync` to force writes to commit
+   - Brute-forces device filenames ("one-binary-fits-all" approach)
+3. **Result:** Modem firmware permanently erased. Physical replacement required. 28,000+ modems bricked.
+4. **Code similarity with VPNFilter:** Shared statically-linked libc, identical section headers, same IOCTL usage
+
+**Black market:** NOT available. GRU Sandworm. Source code never leaked.
+
+### CYCLOPS BLINK (Sandworm — 2019-2022)
+
+**Target:** WatchGuard Firebox VPN/firewall appliances. 1,500+ devices in botnet cluster.
+
+**How it works:**
+1. **Linux ELF** (32-bit PowerPC) — core + 4 built-in modules (forked child processes, IPC via pipes)
+2. **Masquerades** as kernel process `"kworker[0:1]"`
+3. Modifies `iptables` to allow C2 on hardcoded ports
+4. **C2:** TLS tunnel (OpenSSL 1.0.1f) + AES-256-CBC per-command encryption. Random C2 IP from embedded list. Managed via Tor.
+5. **Persistence:** Deployed as firmware "update" — exploits weak HMAC validation in WatchGuard update process (hardcoded key). Adds files `WGUpgrade-dl`, `S51armled` to firmware image. Survives legitimate firmware updates — reinfects after reboot.
+6. **Modules:** C2 server, file upload/download, system info (`/etc/passwd`, `/proc/mounts`, sysinfo), update/persistence
+
+**What you can do:** Take over 1,500+ VPN/firewall appliances worldwide. Intercept all traffic passing through them. Use as botnet for further attacks on internal networks behind the firewalls.
+
+**Black market:** Not available. GRU Sandworm. CISA/NSA joint advisory published May 2023.
+
+---
+
+## 10. COMMERCIAL SPYWARE — DEEP TECHNICAL
+
+### PEGASUS — Full Technical Breakdown
+
+**C2 Architecture:**
+- Web-based management console (operators manage targets, deploy exploits, retrieve data)
+- Implant ↔ C2 via HTTPS (TLS with certificate pinning)
+- **Exfiltration channels:** HTTPS POST, encrypted cloud upload (Dropbox/Google Drive), DNS tunneling (fallback), SMS commands
+
+**FORCEDENTRY technical (CVE-2021-30860) — The breakthrough zero-click:**
+
+1. Attacker sends iMessage with malicious PDF/image attachment to target
+2. Apple's `BlastDoor` sandbox processes the attachment for iMessage
+3. Vulnerability in `JBIG2Stream::readTextRegionSeg` in CoreGraphics
+4. **The genius:** JBIG2 is a bitmap compression standard — NO scripting language natively. But FORCEDENTRY uses **70,000+ JBIG2 segment commands** to emulate logic gates → builds a custom CPU architecture with registers, 64-bit adder, and comparator inside the JBIG2 parser
+5. This emulated computer searches memory, performs arithmetic calculations → finds kernel memory
+6. Disables ASLR, bypasses PAC (Pointer Authentication Code) — Apple's strongest security
+7. Escapes BlastDoor sandbox → installs Pegasus with root privileges
+8. **No user interaction — target just receives an iMessage**
+
+**BLASTPAST (2023 — iOS 16.6):**
+- Two-stage: Apple HomeKit (`homed` crash via NSKeyedUnarchiver) + Apple Wallet `.pkpass` with embedded WebP image (CVE-2023-4863)
+- WebP contains NSExpression primitives decoding Base64-embedded encrypted exploit blobs
+- Still no user interaction required
+
+**Pegasus Capabilities (complete list):**
+- Full phone takeover (not just partial access)
+- Call recording (record both sides of any call)
+- Ambient microphone activation (record room silently)
+- Front + rear camera activation
+- Real-time GPS tracking + history
+- All messaging apps: WhatsApp, Signal, Telegram, iMessage, Viber, Facebook Messenger, WeChat
+- Keychain extraction (iOS) — all saved passwords
+- Cloud tokens (iCloud, Google) — access cloud backups
+- Extract data from encrypted apps
+- Kernel-level persistence (later versions survive reboot)
+
+**Detection indicators:**
+- `com.apple.xpc.roleaccountd.staging/natgd` process (Pegasus process on iOS)
+- `passd` running with `imagent` as parent
+- Anomalous `Celestial.framework`, `Media.framework`, `CoreLocation.framework` usage
+
+**Black market:** NOT directly available. Only through NSO Group contracts ($500K-$8M+). In 2018, an NSO employee attempted to sell Pegasus for $50M on black market — was caught and arrested by the company.
+
+---
+### PREDATOR (Intellexa) — ALIEN Bootkit Technical
+
+**Delivery chain (CDN Poisoning):**
+1. Compromised CDN edge node (Akamai/CloudFront) intercepts target's app update request
+2. Serves malicious update containing ALIEN injector instead of legitimate binary
+3. No user interaction for the interception
+
+**ALIEN Bootkit persistence:**
+1. Injected into `zygote64` (Android's core process — parent of all Android apps) via `ptrace` attach
+2. Downloads remaining components from installation server
+3. Creates **shared memory file descriptors** for IPC between ALIEN and PREDATOR — invisible to SELinux
+4. Communicates via `ioctl` commands (no access violations → SELinux never triggered)
+5. Original Android: did NOT survive reboot. Updated (April 2022): reboot persistence added
+
+**PREDATOR spware technical:**
+- `pyfrozen` ELF file with serialized Python modules + native code
+- Native: `tcore` (main module) + `kmem` (privilege escalation)
+- Python modules: audio recording, TLS certificate poisoning (MITM), app hiding, app execution prevention, directory enumeration
+- Communication via shared memory file descriptors (invisible to Android security)
+
+**Black market:** EUR 8-13.6M per deployment via Intellexa. NOT available on open market.
+
+---
+### FINSPY / FINFISHER — UEFI Bootkit
+
+**Discovered 2021. FinFisher GmbH (Gamma Group). Government/Law enforcement only.**
+
+**UEFI persistence chain:**
+1. Replaces `bootmgfw.efi` (Windows Boot Manager) with malicious version
+2. Original boot manager renamed and stored in `efi\microsoft\boot\en-us\` with hex-character name
+3. EFI partition contains two encrypted files:
+   - Winlogon Injector (RC4 encrypted, key = EFI system partition GUID)
+   - Trojan Loader (RC4 encrypted, key = EFI system partition GUID)
+4. Malicious boot manager loads original Windows, but **patches kernel transition function**
+5. Patched function hooks `PsCreateSystemThread` → creates a thread decrypting the next stage
+6. Next stage locates and decrypts Trojan Loader from EFI partition
+7. Trojan Loader waits for user login → injects into `winlogon.exe`
+8. Final: extracts FinSpy DLL from resources, decrypts (XOR + aPLib), reflectively loads in-memory
+
+**Pre-validator/Post-validator system:**
+- **Pre-validator:** Runs security checks before deploying full payload (avoid sandbox/researcher analysis)
+- **Post-validator:** Server-side check — verifies target is actually the intended victim
+- Only then deploys full FinSpy trojan
+
+**Obfuscation:**
+- 4-layer custom obfuscation (OLLVM-like + custom protectors)
+- 4,000 random bytes prepended to payload
+- Unique per-machine encryption keys
+- 5MB+ loader files to hinder analysis
+
+**Platforms:** Windows, macOS, Linux, iOS, Android
+
+**Black market:** Licensed to government/Law enforcement only ($130K-$500K per license). NOT available on underground markets.
+
+---
+
+## 11. BLACK MARKET ECOSYSTEM — DEEP DIVE
+
+### RAMP Forum (Russian Ransomware & Advanced Malware Protection)
+
+**Access:**
+- Must be active member on XSS or Exploit forums (2+ months, 10+ posts, good reputation)
+- OR pay $500 anonymous registration fee
+- 14,000+ registered members
+- Invite-only for high-trust areas
+- Admin claims ~$250K annual revenue
+
+**Listing Categories (leaked DB Nov 2021-Jan 2024, 333 IAB threads):**
+
+| Category | Listings | Typical Items | Price Range |
+|----------|----------|---------------|-------------|
+| **Initial Access Sales** | 333 | VPN/RDP/SSH access to companies (56.4% Domain User, 33.9% Domain Admin) | $500-$30,000 |
+| **Exploits & 0-days** | 22 | SonicWall VPN RCE ($100K), Office 0-day, WinRAR RCE | $30K-$100K |
+| **Crypters / FUD** | 17 | Private Crypt ($2K/month), Luxury Shield | $70-$2K/month |
+| **Ransomware kits** | 12 | Kakia v2, Thanos, ESXi variants | $500-$10,000 |
+| **RATs & Backdoors** | 11 | Windows backdoors, Android banking trojans | $45-$500 |
+| **Stealers** | 10 | LummaC2, Mars Stealer, Meduza, OSKI | $100-$1K |
+| **Botnets** | 7 | Crypto-stealing botnet ($25K), GoldBrute RDP scanner | $1K-$25K |
+| **Loaders** | 6 | AresLoader, BazarLoader | $200-$500 |
+
+**Top Initial Access Brokers on RAMP:**
+| Alias | Listings | Specialty |
+|-------|----------|-----------|
+| **inthematrix** | 41 | Corporate RDP — US, EU, Asia, Government |
+| **boxi** | 23 | VNC/SSH access + data dumps |
+| **el84** | 18 | Brazil, Israel, Telecom |
+| **RobinHood** | 12 | Access broker + RaaS operator "KUIPER" |
+| **jacksparrow** | 11 | US/EU RDP access |
+
+**Pricing breakdown (2025-2026):**
+- Average IAB price: ~$6,400 (up 88-103% from 2023)
+- Commodity RDP: $500-$1,500
+- Domain admin (financial sector, $400M+ revenue): $5,000+
+- Domain admin (healthcare, US): upwards of $20,000
+- Highest observed: $30,000 buy-it-now
+- Buyer-seller revenue-sharing models becoming common
+
+---
+### Exploit.in Forum (Longest-running Russian Exploit Market)
+
+**Format:** Auction-style bidding for premium access
+- Average initial price (2024): $2,812 (up 88% from 2023)
+- Average blitz/buy-it-now: $5,784 (up 103%)
+- Highest observed: $25,000 initial / $30,000 blitz
+- Required reputation to post
+- Categories: exploits, 0-days, access, malware, crypto, tutorials
+- **Declining in 2025-2026** — older users aging out, RAMP taking over
+
+---
+### Telegram Private Channels (Current dominant platform)
+
+Major migration from Tor forums to Telegram — lower barrier, faster, ephemeral, harder to police.
+
+**Channel types and pricing:**
+| Channel Type | Access | Price | Description |
+|-------------|--------|-------|-------------|
+| VIP stealer logs | Invite-only | $200-400/month XMR | Fresh, untouched credentials from RedLine/Vidar/Raccoon logs |
+| 0-day exploit channels | Invite-only, verify via escrowed sample | $50K-$4M per exploit | Browser, mobile, chat app exploits |
+| MaaS channels | Invite-only | $500-$5,000/month | HVNC RAT suites ($5K/mo), EDR killers ($1-3K/mo) |
+| DDoS botnet rental | Public | $50-$500/day | Layer 4/7 attacks |
+| Ransomware affiliate recruitment | Invite-only | Commission split | 70-90% to affiliate |
+
+**Zero-day pricing on Telegram private channels (current 2026):**
+| Target | Type | Price Range |
+|--------|------|-------------|
+| Chrome RCE | One-click | $80K-$200K |
+| Outlook RCE | One-click | $100K-$300K |
+| Windows LPE | Local | $50K-$150K |
+| WhatsApp RCE | Zero-click | $1M-$3M |
+| Telegram RCE | Zero-click | $500K-$1.5M |
+| Telegram full chain | Zero-click → OS | $4M |
+| iOS kernel exploit | Remote | $1M-$2.5M |
+| Android kernel exploit | Remote | $500K-$1.5M |
+
+**How to verify Telegram seller:**
+1. **Vouch system:** Seller provides past anonymous buyers who vouch for them
+2. **Escrowed sample:** Buyer deposits 4% escrow fee → seller provides limited PoC → buyer verifies → full payment → complete exploit
+3. **Reputation tracking:** Cross-reference handles across Exploit/XSS/RAMP forums
+4. **Red flags:** New accounts, no vouches, demands full payment upfront, refuses escrow
+
+---
+### Dark Web Marketplace Dynamics (2026)
+
+| Marketplace | Status | Focus | IAB Price Range | Notes |
+|-------------|--------|-------|-----------------|-------|
+| **RAMP** | Active | RaaS + IAB | $500-$30K | Russian, highest quality, tough entry |
+| **Exploit.in** | Active (declining) | Exploits + IAB | $500-$25K | Oldest, aging user base |
+| **XSS.is** | Down (frequent) | IAB + Malware | $500-$5K | Frequent law enforcement seizures |
+| **DarkForums** | Active (rising) | Hybrid — IAB + fraud | $500-$15K | English-language, more open registration |
+| **BreachForums** | Seized/rebooted multiple times | Breach data | $500-$10K | Repeatedly disrupted by FBI |
+| **Telegram** | Active (growing) | All categories | $200-$4M | Hardest to police, fastest growing |
+
+### Payment Methods
+
+| Method | Use | Notes |
+|--------|-----|-------|
+| **Bitcoin (BTC)** | Standard | 5-30 min confirmation, traceable with blockchain analysis |
+| **Monero (XMR)** | Preferred | Mandatory on many forums for privacy. Untraceable |
+| **USDT (TRC20)** | Growing | Stable value, fast settlement |
+| **Escrow** | Required on RAMP/Exploit | 4% fee on RAMP. Platform holds payment until delivery confirmed |
+| **Direct payment** | Established vendors only | Only after extensive vouch history |
+
+### Summary: Tool Availability Matrix
+
+| Tool / Category | Where to Get It | Price | Can You Buy It? |
+|----------------|----------------|-------|-----------------|
+| NSA Equation Group tools | Leaked (Shadow Brokers/GitHub) | FREE | Yes — leaked publicly |
+| CIA Vault 7 tools | Leaked (WikiLeaks/GitHub) | FREE | Yes — leaked publicly |
+| Pegasus | NSO Group contract only | $500K-$8M+ | No — gov license only |
+| Predator | Intellexa contract only | EUR 8-13.6M | No — gov license only |
+| FinFisher/FinSpy | Gamma Group license | $130K-$500K | No — LE license only |
+| EternalBlue/DOUBLEPULSAR | GitHub (Metasploit modules) | FREE | Yes — integrated into tools |
+| SUNBURST | Never leaked | N/A | No — SVR only |
+| Shamoon | Never leaked | N/A | No — Iran only |
+| Snake (Turla) | Never leaked | N/A | No — FSB only |
+| 0-day exploits (browser) | Telegram private channels | $80K-$4M | Yes — via brokers/IABs |
+| 0-day exploits (mobile) | Crowdfense/Operation Zero | $2.5M-$20M | Yes — if you're a government |
+| Initial Access (VPN/RDP) | RAMP/Exploit/DarkForums | $500-$30K | Yes — anyone with crypto |
+| Ransomware kits | RAMP/Telegram | $500-$10K | Yes — includes builder + panel |
+| Stealer logs | Telegram/forums | $200-400/month | Yes — ongoing subscription |
+| Crypters/FUD | Telegram/forums | $70-$2K/month | Yes — subscription |
+| Cobalt Strike (cracked) | RAMP | $5K | Yes — cracked version |
+| Botnet rental | Telegram | $50-$500/day | Yes — pay per use |
 
 ### Major Players
 
@@ -499,7 +1006,7 @@ Israeli spyware firm. Uses DNS-over-HTTPS (DoH) exfiltration to avoid network mo
 
 ---
 
-## 7. THE ZERO-DAY MARKET ECONOMY
+## 12. THE ZERO-DAY MARKET ECONOMY
 
 ### Market Structure
 
