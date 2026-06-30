@@ -482,8 +482,11 @@
       <a href="#nso">NSO/Pegasus</a>
       <a href="#russia">Russia</a>
       <a href="#china">China</a>
+      <a href="#nkorea">N. Korea</a>
+      <a href="#iran">Iran</a>
+      <a href="#supplychain">Supply</a>
       <a href="#market">Market</a>
-      <a href="#acquisition">Acquisition</a>
+      <a href="#acquisition">Acq.</a>
     </div>
   </div>
 </nav>
@@ -1021,6 +1024,58 @@
   </div>
 </section>
 
+<!-- Additional Russian Weapons -->
+<section id="russia-extra">
+  <span class="section-tag russia">Russia — Elite Weapons</span>
+  <h2 class="section-title">Additional Russian Cyber Arsenal</h2>
+  <p class="section-subtitle">Beyond the well-known wipers and espionage tools, Russia fields some of the most technically elite cyber weapons in existence — from the FSB's peer-to-peer Snake malware to Sandworm's satellite modem bricker ACIDRAIN.</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">FSB PEER-TO-PEER</div>
+      <div class="tool-name">SNAKE MALWARE</div>
+      <div class="tool-aka">Turla / FSB Center 16 — Most Sophisticated Russian Implant</div>
+      <div class="tool-desc">The most sophisticated Russian espionage implant. P2P mesh network — infected machines act as relays. Kernel module: can function as server without opening ANY ports (completely stealth). 4-layer protocol stack: Raw TCP/UDP, HTTP, SMTP, DNS, ICMP, raw IP. Diffie-Hellman + pre-shared key session encryption. End-to-end encryption between operator and target. Full keylogging, file exfiltration, screen capture, remote code execution. Survives OS reinstall via kernel persistence. Windows + Linux.</div>
+      <div class="tool-tags"><span class="tool-tag orange">P2P-MESH</span><span class="tool-tag orange">KERNEL</span><span class="tool-tag orange">FSB</span></div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">NOT available. Never leaked. FSB only.</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">OLYMPIC SABOTAGE</div>
+      <div class="tool-name">OLYMPIC DESTROYER</div>
+      <div class="tool-aka">2018 Winter Olympics — PyeongChang Wiper</div>
+      <div class="tool-desc">Destroyed PyeongChang Winter Olympics opening ceremony: networks, ticket system, broadcaster, Wi-Fi. Dropper with 2 required arguments. Browser stealer (IE/Firefox/Chrome parsing registry + SQLite DB). LSASS dump with Mimikatz (18.5% code overlap with Chinese APT3 — intentional false flag). 32KB credential patch at offset 0x26F1A-0x2EF1A with 44 unique credentials. Lateral movement: PsExec + WMI + EternalBlue/EternalRomance. MBR overwrite → VBR wipe → file corruption → Windows recovery disabled. Korean characters in credentials (misdirection). Chinese code overlap (intentional false flag).</div>
+      <div class="tool-tags"><span class="tool-tag orange">OLYMPICS</span><span class="tool-tag orange">FALSE-FLAG</span><span class="tool-tag orange">WIPER</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">SATELLITE WIPER</div>
+      <div class="tool-name">ACIDRAIN</div>
+      <div class="tool-aka">VIA KA-SAT Modem Bricker (2022) — 28,000+ Modems</div>
+      <div class="tool-desc">Permanently bricked 28,000+ Viasat KA-SAT satellite broadband modems simultaneously with Russia's 2022 invasion of Ukraine. MIPS ELF binary (32-bit, big-endian) for embedded Linux. Runs as root: recursively overwrites all files with 0xFFFFFFFF via 4-byte integers. Iterates /dev/mtdblock0-99 (flash storage). Uses IOCTLs: MEMGETINFO, MEMUNLOCK, MEMERASE, MEMWRITEOOB — hardware flash operations. Calls fsync to force write commit. Brute-forces device filenames ("one-binary-fits-all"). Modem firmware permanently erased — physical replacement required. Code similarity with VPNFilter: shared statically-linked libc, identical section headers, same IOCTL usage.</div>
+      <div class="tool-tags"><span class="tool-tag orange">SATELLITE</span><span class="tool-tag orange">28K-BRICKED</span><span class="tool-tag orange">MIPS-ELF</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">VPN APPLIANCE BOTNET</div>
+      <div class="tool-name">CYCLOPS BLINK</div>
+      <div class="tool-aka">Sandworm — WatchGuard Firebox Botnet (2019-2022)</div>
+      <div class="tool-desc">Botnet of 1,500+ WatchGuard Firebox VPN/firewall appliances. Linux ELF (32-bit PowerPC) — core + 4 built-in modules (forked child processes, IPC via pipes). Masquerades as kernel process "kworker[0:1]". Modifies iptables to allow C2 on hardcoded ports. TLS tunnel C2 (OpenSSL 1.0.1f) + AES-256-CBC per-command encryption. Random C2 IP. Managed via Tor. Persistence: exploits weak HMAC validation in WatchGuard update process (hardcoded key). Adds files WGUpgrade-dl, S51armled to firmware image. Survives legitimate firmware updates — reinfects after reboot. Modules: C2 server, file upload/download, system info, update/persistence.</div>
+      <div class="tool-tags"><span class="tool-tag orange">VPN-BOTNET</span><span class="tool-tag orange">1.5K-APPLIANCES</span><span class="tool-tag orange">TOR-C2</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--orange)">DISK WIPER</div>
+      <div class="tool-name">CADDY WIPER</div>
+      <div class="tool-aka">Sandworm — Ukraine 2022 Fast Wiper</div>
+      <div class="tool-desc">Deployed by Sandworm during Russian invasion of Ukraine. Fast multi-threaded Windows disk wiper. Overwrites critical system files + destroys partition tables. No ransomware component — pure destruction. Designed for rapid, irreversible data destruction across multiple systems.</div>
+      <div class="tool-tags"><span class="tool-tag orange">WIPER</span><span class="tool-tag orange">UKRAINE</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- China -->
 <section id="china">
   <span class="section-tag china">China / PLA</span>
@@ -1066,13 +1121,276 @@
   </div>
 </section>
 
+<!-- North Korea / Lazarus -->
+<section id="nkorea">
+  <span class="section-tag nso">North Korea / Lazarus Group</span>
+  <h2 class="section-title">HIDDEN COBRA Arsenal</h2>
+  <p class="section-subtitle">North Korea's premier cyber warfare unit — Bureau 121 (Reconnaissance General Bureau). Responsible for Sony Pictures hack (2014), Bangladesh Bank heist ($81M), WannaCry ($4B), and DarkSeoul. Operates a "malware factory" producing samples via multiple independent conveyors since at least 2009.</p>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">SMB WORM</div>
+      <div class="tool-name">BRAMBUL</div>
+      <div class="tool-aka">SMB Worm / Lateral Movement</div>
+      <div class="tool-desc">SMB worm that brute-forces port 445/TCP using hardcoded weak passwords ("123123", "abc123", "password", "iloveyou", "login"). On success, creates a hidden net share to C: drive. Victim credentials sent to hardcoded email via Google SMTP. Provides initial access to Windows networks via weak passwords.</div>
+      <div class="tool-tags"><span class="tool-tag pink">SMB-WORM</span><span class="tool-tag pink">BRUTE-FORCE</span></div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">Leaked via Operation Blockbuster on GitHub</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">P2P BACKDOOR</div>
+      <div class="tool-name">JOANAP</div>
+      <div class="tool-aka">Peer-to-Peer Backdoor</div>
+      <div class="tool-desc">RC4-encrypted P2P backdoor registering as service 'scardprv.dll' (SmartCard Protector). Infected machines talk to each other in a mesh network — no central C2 to takedown. Commands: open backdoor, send files, save/delete files, download/run executables, start/kill processes.</div>
+      <div class="tool-tags"><span class="tool-tag pink">P2P</span><span class="tool-tag pink">RC4</span></div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">Gov-only. Leaked samples.</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">DESTRUCTIVE WIPER</div>
+      <div class="tool-name">DESTROVER</div>
+      <div class="tool-aka">Sony Pictures 2014 Wiper</div>
+      <div class="tool-desc">Destroyed 3,062 of Sony's 6,797 workstations + 837 of 1,555 servers. Uses Eldos RawDisk driver (signed kernel driver) for raw disk access. Opens handle via `\\.\ElRawDisk\??\PhysicalDrive0#<LICENSE_KEY>`. Overwrites MBR with custom bootloader. Corrupts partition tables. Stole 100TB+ data before wiping.</div>
+      <div class="tool-tags"><span class="tool-tag pink">WIPER</span><span class="tool-tag pink">RAW-DISK</span><span class="tool-tag pink">SONY</span></div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">Gov-only. Leaked samples in Op Blockbuster.</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">DESTRUCTIVE WIPER</div>
+      <div class="tool-name">DARKSEOUL</div>
+      <div class="tool-aka">2013 South Korea Attack</div>
+      <div class="tool-desc">Wiped 32,000 machines simultaneously on March 20, 2013 at 14:00 KST. MBR overwrite + boot sector corruption on all machines. Targets: MBC, YTN (broadcasters), Shinhan Bank, Nonghyup Bank, Jeju Bank. Used IRC-controlled botnet (XwDoor/Keydoor, earliest sample Jan 2009) for long-term recon before activation.</div>
+      <div class="tool-tags"><span class="tool-tag pink">WIPER</span><span class="tool-tag pink">32K-MACHINES</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">RANSOMWARE</div>
+      <div class="tool-name">WANNACRY</div>
+      <div class="tool-aka">2017 Global Ransomware Epidemic</div>
+      <div class="tool-desc">$4B damages, 200,000+ systems in 150 countries in 72 hours. Uses ETERNALBLUE + DOUBLEPULSAR (NSA leaked exploits — not built by Lazarus). AES-128 per-file encryption with RSA-2048 key wrapping. Self-spreading SMB worm. Killed by domain registration. Attributed to Lazarus subgroup Bluenoroff (APT38).</div>
+      <div class="tool-tags"><span class="tool-tag pink">RANSOMWARE</span><span class="tool-tag pink">WORM</span><span class="tool-tag pink">NSA-LINKED</span></div>
+      <div class="tool-details">
+        <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">$500-$5K for modified builders on dark web</span></div>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-category" style="color:var(--pink)">BANKING THEFT</div>
+      <div class="tool-name">BANGLADESH BANK HEIST</div>
+      <div class="tool-aka">$81M SWIFT Heist (APT38)</div>
+      <div class="tool-desc">Lazarus subgroup Bluenoroff (APT38) infiltrated Bangladesh Bank's SWIFT network. Compromised SWIFT Alliance Access software. Sent fraudulent SWIFT transfer requests to NY Fed. Total attempted: $951M. Actually stolen: $81M. Traced to casino accounts in Philippines. Changed global banking security protocols permanently.</div>
+      <div class="tool-tags"><span class="tool-tag pink">SWIFT</span><span class="tool-tag pink">FINANCIAL</span><span class="tool-tag pink">$81M</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Iran / APT33/34/35 -->
+<section id="iran">
+  <span class="section-tag nso">Iran / APT Groups</span>
+  <h2 class="section-title">Iranian Cyber Operations</h2>
+  <p class="section-subtitle">Evolution: website defacements (2009-2012) → destructive disk wipers (2012-2019) → cross-platform file-level destruction (2020-2022) → identity weaponization via living-off-the-land (2023-2026). APT33 (Elfin), APT34 (OilRig), APT35 (Charming Kitten) — operating against energy, government, and financial sectors.</p>
+
+  <div class="tabs" id="iran-tabs">
+    <button class="tab active" data-tab="iran-wipers">Wipers & Destruction</button>
+    <button class="tab" data-tab="iran-apt">APT33 / APT34 Tools</button>
+  </div>
+
+  <div id="iran-wipers" class="tab-content active">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--pink)">DISK WIPER</div>
+        <div class="tool-name">SHAMOON 1/2/3</div>
+        <div class="tool-aka">Disttrack — Saudi Aramco Wiper</div>
+        <div class="tool-desc">Iran's most famous wiper. Shamoon 1 (2012): 35,000 Saudi Aramco workstations destroyed. Uses Eldos RawDisk.sys driver loaded via SCM. Opens `\\.\ElRawDisk\??\PhysicalDrive0#<LICENSE_KEY>`. System date changed to August 2012 for trial license exploit. Overwrites MBR + critical files + system image with garbage data. Displays burning US flag after reboot (Shamoon 1) / Ukraine flag (Shamoon 2). Shamoon 3 (2018): targetted Saipem — ~300 servers + 100 PCs wiped.</div>
+        <div class="tool-tags"><span class="tool-tag pink">WIPER</span><span class="tool-tag pink">RAW-DISK</span><span class="tool-tag pink">35K-SYSTEMS</span></div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">NOT available. Iran gov weapon only.</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--pink)">ADVANCED WIPER</div>
+        <div class="tool-name">ZEROCLEARE / DUSTMAN</div>
+        <div class="tool-aka">2019 Energy Sector Attack</div>
+        <div class="tool-desc">Improvement over Shamoon: uses unsigned RawDisk driver loaded via Turla Driver Loader (TDL) — exploits signed VBoxDrv driver vulnerability to bypass Driver Signature Enforcement. Single executable (vs Shamoon's multi-file). Overwrites volumes with 0x55 or text message. Ultimate chain: VPN zero-day → VPN compromise → Domain admin theft → Deploy via AV management console via PsExec → Simultaneous wipe.</div>
+        <div class="tool-tags"><span class="tool-tag pink">ADVANCED-WIPER</span><span class="tool-tag pink">DRIVER-SIGN-BYPASS</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="iran-apt" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--pink)">APT33 BACKDOOR</div>
+        <div class="tool-name">TURNEDUP / SHAPESHIFT</div>
+        <div class="tool-aka">APT33 (Elfin) Dual-Purpose Tools</div>
+        <div class="tool-desc">TURNEDUP: backdoor with file upload/download, reverse shell (cmd.exe), screenshot, system info. Delivered via DROPSHOT dropper. Early Bird APC injection into rundll32.exe. Registry persistence. SHAPESHIFT/STONEDRILL: dual-purpose — backdoor mode (full RAT) or wiper mode (MBR clear + file delete on all volumes). Farsi language artifacts. Anti-emulation (sleep loops, API call sequence check).</div>
+        <div class="tool-tags"><span class="tool-tag pink">APT33</span><span class="tool-tag pink">DUAL-PURPOSE</span></div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">Gov-only. Never leaked.</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--pink)">POWERSHELL IMPLANT</div>
+        <div class="tool-name">POWERTON / TICKLER</div>
+        <div class="tool-aka">APT33 Fileless + Cloud Tools</div>
+        <div class="tool-desc">POWERTON: fully PowerShell-based backdoor. Encrypted C2, multiple persistence (scheduled tasks, WMI, Registry). Mimikatz integration for credential harvesting. Fileless — no binaries on disk. TICKLER: multi-stage backdoor using Azure-based C2 (azurewebsites.net). Password spray → hijack educational accounts → create Azure subscriptions → deploy Stage 1 C2 → Stage 2 trojan → SMB lateral → RMM tools → AD snapshot theft. Cloud-based espionage with no traditional infrastructure.</div>
+        <div class="tool-tags"><span class="tool-tag pink">FILELESS</span><span class="tool-tag pink">CLOUD-C2</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--pink)">APT34 BACKDOOR</div>
+        <div class="tool-name">SideTwist / TwoFace</div>
+        <div class="tool-aka">OilRig / APT34 Tools</div>
+        <div class="tool-desc">SideTwist: C backdoor with HTTP GET/POST C2 on port 443 (fallback 80). Commands: shell (101), download (102), upload (103), shell dup (104). Mersenne Twister PRNG encryption + Base64. Scheduled task `SystemFailureReporter` every 5min. Exits after one command — minimal footprint. TwoFace: ASPX web shell with loader + embedded encrypted payload tested 22 iterations reaching 0 AV detection. Decrypted in memory. File mgmt, cmd exec, SQL queries, network scanning.</div>
+        <div class="tool-tags"><span class="tool-tag pink">APT34</span><span class="tool-tag pink">MINIMAL-FOOTPRINT</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--pink)">DNS TUNNELING</div>
+        <div class="tool-name">Helminth / TONEDEAF</div>
+        <div class="tool-aka">APT34 DNS C2 / Modular Backdoor</div>
+        <div class="tool-desc">Modular backdoor from OilRig using DNS tunneling C2 (TONEDEAF). AES-encrypted HTTP/S. Credential harvesters. Living-off-the-land: PowerShell, WMI, native Windows utilities. Cloud-based C2 via Azure and VPS. Targets government and financial organizations for long-term espionage.</div>
+        <div class="tool-tags"><span class="tool-tag pink">DNS-TUNNEL</span><span class="tool-tag pink">LOTL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Supply Chain Attacks -->
+<section id="supplychain">
+  <span class="section-tag russia">Supply Chain Attacks</span>
+  <h2 class="section-title">Weaponized Software Updates</h2>
+  <p class="section-subtitle">The most devastating cyber attacks in history have come through compromised software supply chains — trojanized updates that bypass all security controls. Trusted vendors become unwitting delivery vehicles for nation-state malware.</p>
+
+  <div class="tabs" id="supply-tabs">
+    <button class="tab active" data-tab="supply-solarwinds">SolarWinds</button>
+    <button class="tab" data-tab="supply-ccleaner">CCleaner</button>
+    <button class="tab" data-tab="supply-notpetya">NotPetya / M.E.Doc</button>
+  </div>
+
+  <div id="supply-solarwinds" class="tab-content active">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--orange)">SVR SUPPLY CHAIN</div>
+        <div class="tool-name">SUNBURST / SUPERNOVA</div>
+        <div class="tool-aka">SolarWinds Orion (2020) — APT29 / Cozy Bear</div>
+        <div class="tool-desc">The largest known supply chain attack. 18,000 customers received trojanized Orion update. Active compromise of ~100 high-value targets (US govt, Fortune 500, FireEye). Perpetrated by Russian SVR (APT29 / UNC2452). 4,000 lines of malicious code in SolarWinds.Orion.Core.BusinessLayer.dll. Malware slept 2 weeks before contacting C2. Only executed if no forensic/AV tools detected. C2 via DGA domain + HTTPS mimicking Orion Improvement Program protocol. Exfiltration blended into legitimate Orion telemetry.</div>
+        <div class="tool-tags"><span class="tool-tag orange">SVR</span><span class="tool-tag orange">18K-CUSTOMERS</span><span class="tool-tag orange">2-WEEK-SLEEP</span></div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">NOT available. SVR gov weapon. Never leaked.</span></div>
+          <div class="tool-detail-item"><span class="tool-detail-label">Targets</span><span class="tool-detail-value">US govt, Fortune 500, security vendors</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="supply-ccleaner" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--orange)">SUPPLY CHAIN</div>
+        <div class="tool-name">CCLEANER TROJAN</div>
+        <div class="tool-aka">Piriform (2017) — 2.27M Downloads</div>
+        <div class="tool-desc">2.27M downloads of trojanized CCleaner v5.33.6162 / CCleaner Cloud v1.07.3191. Perpetrated by Russian-linked group (potentially APT29 precursor). Piriform's build system was compromised post-Avast acquisition. Stage 1: modified `__scrt_get_dyn_tls_init_callback` to redirect execution, decrypts embedded PIC PE loader. Collects computer name, volume serial, OS, AV product. Exfiltrates via HTTPS POST. Stage 2 (GeeSetup_x86.dll): only delivered to target-matching victims. Writes encoded PE to Registry HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WbemPerf\001. Trojanized binary decodes in-memory. Stage 3 (theoretical): in-memory PE from IP stego'd in GitHub/WordPress search results.</div>
+        <div class="tool-tags"><span class="tool-tag orange">2.27M-DOWNLOADS</span><span class="tool-tag orange">3-STAGE</span></div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">NOT for sale. Source published by Talos/Cisco.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="supply-notpetya" class="tab-content">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--orange)">GRU WIPER</div>
+        <div class="tool-name">NOTPETYA via M.E.Doc</div>
+        <div class="tool-aka">2017 — $10B+ Damages (GRU Sandworm)</div>
+        <div class="tool-desc">$10B+ damages — Maersk ($300M), Merck, FedEx, Saint-Gobain, WPP. Attackers compromised M.E.Doc (Ukrainian mandatory tax software). Stole update server credentials. Modified nginx.conf to proxy to attacker server. Backdoor in ZvitPublishedObjects.dll polled attacker every 2min via MeCom object. NotPetya delivered through legitimate update. Technical propagation: runs as DLL, WDigest + Mimikatz LSASS dump, multi-threaded lateral movement via PsExec + WMI + EternalBlue (if Kaspersky detected), 44+ hardcoded credentials, MFT overwrite + MBR custom bootloader + Salsa20/RSA-2048 encryption. Fake CHKDSK display during destruction. Bitcoin address unmonitored — pure destructiveness disguised as ransomware.</div>
+        <div class="tool-tags"><span class="tool-tag orange">$10B</span><span class="tool-tag orange">GRU</span><span class="tool-tag orange">PSEUDO-RANSOMWARE</span></div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">NOT available. GRU government weapon.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Commercial Spyware -->
 <section id="spyware">
   <span class="section-tag broker">Commercial Spyware</span>
   <h2 class="section-title">Commercial Surveillance Vendors</h2>
   <p class="section-subtitle">A multi-billion dollar gray market. Private companies develop zero-click exploits and sell to governments. Pegasus is just the tip of the iceberg. Here are the major players and their tools.</p>
 
-  <div class="tool-grid">
+  <div class="tabs" id="spyware-tabs">
+    <button class="tab active" data-tab="spyware-deep">Deep Technical</button>
+    <button class="tab" data-tab="spyware-vendors">Vendor Overview</button>
+  </div>
+
+  <div id="spyware-deep" class="tab-content active">
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent)">PEGASUS DEEP DIVE</div>
+        <div class="tool-name">FORCEDENTRY — The Zero-Click Masterpiece</div>
+        <div class="tool-aka">CVE-2021-30860 / The exploit that defeated BlastDoor</div>
+        <div class="tool-desc">The most technically impressive mobile exploit ever discovered. Sends iMessage with malicious PDF/image. Exploits JBIG2Stream::readTextRegionSeg in CoreGraphics. The genius: JBIG2 is a bitmap standard with NO scripting — but FORCEDENTRY uses 70,000+ JBIG2 segment commands to emulate logic gates, building a custom CPU with registers, 64-bit adder, and comparator inside the JBIG2 parser. This emulated computer searches memory, disables ASLR, bypasses PAC (Apple's strongest security), escapes BlastDoor sandbox, and installs Pegasus with root privileges. No user interaction — target just receives an iMessage.</div>
+        <div class="tool-tags"><span class="tool-tag green">ZERO-CLICK</span><span class="tool-tag green">iMESSAGE</span><span class="tool-tag green">EMULATED-CPU</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent)">PEGASUS DEEP DIVE</div>
+        <div class="tool-name">BLASTPAST — iOS 16.6 Chain</div>
+        <div class="tool-aka">2023 — Two-Stage iMessage Exploit</div>
+        <div class="tool-desc">Two-stage zero-click: Apple HomeKit (homed crash via NSKeyedUnarchiver) + Apple Wallet .pkpass with embedded WebP image (CVE-2023-4863). WebP contains NSExpression primitives decoding Base64-embedded encrypted exploit blobs. Still no user interaction. Demonstrates NSO's ability to chain multiple patched vulnerabilities together for new zero-click vectors.</div>
+        <div class="tool-tags"><span class="tool-tag green">TWO-STAGE</span><span class="tool-tag green">HOMED</span><span class="tool-tag green">WEBP</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent)">PEGASUS C2</div>
+        <div class="tool-name">Pegasus Full Architecture</div>
+        <div class="tool-aka">Web Console → HTTPS C2 → Implant Stack</div>
+        <div class="tool-desc">Web-based management console for target ops. Implant ↔ C2 via HTTPS (TLS with certificate pinning). Exfiltration channels: HTTPS POST, encrypted cloud upload (Dropbox/Google Drive), DNS tunneling (fallback), SMS commands. Capabilities: full phone takeover, call recording (both sides), ambient microphone activation, front + rear camera, real-time GPS tracking + history, all messaging apps (WhatsApp, Signal, Telegram, iMessage), iOS Keychain extraction, cloud token theft, kernel-level persistence.</div>
+        <div class="tool-tags"><span class="tool-tag green">C2-ARCH</span><span class="tool-tag green">FULL-ACCESS</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent)">UEFI BOOTKIT</div>
+        <div class="tool-name">FinFisher / FinSpy UEFI Chain</div>
+        <div class="tool-aka">Gamma Group — Government/Law Enforcement Bootkit</div>
+        <div class="tool-desc">Discovered 2021. Replaces bootmgfw.efi (Windows Boot Manager) with malicious version. Original renamed and stored in efi\microsoft\boot\en-us\ with hex name. EFI partition contains 2 encrypted files: Winlogon Injector + Trojan Loader (both RC4 encrypted, key = EFI system partition GUID). Malicious boot manager patches kernel transition function → hooks PsCreateSystemThread → decrypts next stage → waits for login → injects into winlogon.exe → final FinSpy DLL reflectively loaded in-memory. 4-layer custom obfuscation (OLLVM-like), 4,000 random bytes prepended to payload, unique per-machine keys, 5MB+ loader files to hinder analysis.</div>
+        <div class="tool-tags"><span class="tool-tag green">UEFI-BOOTKIT</span><span class="tool-tag green">4-LAYER-OBFUSCATION</span></div>
+        <div class="tool-details">
+          <div class="tool-detail-item"><span class="tool-detail-label">Market</span><span class="tool-detail-value">$130K-$500K license. Gov/LE only.</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent)">ANDROID BOOTKIT</div>
+        <div class="tool-name">PREDATOR — ALIEN Bootkit</div>
+        <div class="tool-aka">Intellexa — CDN Poisoned Delivery</div>
+        <div class="tool-desc">Delivery: CDN Poisoning — compromised Akamai/CloudFront edge node intercepts target's app update request → serves malicious ALIEN injector instead. ALIEN persistence: injected into zygote64 (Android's core process — parent of all Android apps) via ptrace attach. Creates shared memory file descriptors for IPC between ALIEN and PREDATOR — invisible to SELinux. Communicates via ioctl commands (no access violations → SELinux never triggered). Updated April 2022: reboot persistence added. PREDATOR spyware: pyfrozen ELF with serialized Python modules + native code (tcore main module + kmem privilege escalation). Modules: audio recording, TLS cert poisoning (MITM), app hiding, app execution prevention, directory enumeration.</div>
+        <div class="tool-tags"><span class="tool-tag green">CDN-POISON</span><span class="tool-tag green">SELINUX-BYPASS</span></div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-category" style="color:var(--accent)">PEGASUS DETECTION</div>
+        <div class="tool-name">Pegasus Forensics</div>
+        <div class="tool-aka">How to Detect an Infection</div>
+        <div class="tool-desc">Detection indicators: com.apple.xpc.roleaccountd.staging/natgd process (Pegasus on iOS), passd running with imagent as parent, anomalous Celestial.framework, Media.framework, CoreLocation.framework usage. Citizen Lab identified spyware on 1,847 devices in 34 countries (Nov 2024-Apr 2026). New generation distributed through fragmented resellers, brokers, and shell entities in Cyprus, BVI, UAE. Payment structured as invoices for "software licensing" and "technical support."</div>
+        <div class="tool-tags"><span class="tool-tag green">FORENSICS</span><span class="tool-tag green">DETECTION</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="spyware-vendors" class="tab-content">
+    <div class="tool-grid">
     <div class="tool-card">
       <div class="tool-category" style="color:var(--accent)">GREECE / CYPROT</div>
       <div class="tool-name">PREDATOR</div>
@@ -1128,6 +1446,7 @@
       <div class="tool-desc">Pegasus competitor. Involved in iOS zero-click exploits. Exposed by Citizen Lab and Microsoft in 2023. Company shut down in April 2023 after public exposure. Demonstrates how fragile the commercial spyware market is when operations are exposed.</div>
       <div class="tool-tags"><span class="tool-tag green">iOS</span><span class="tool-tag green">SHUT-DOWN</span></div>
     </div>
+  </div>
   </div>
 </section>
 
@@ -1248,6 +1567,164 @@
       </table>
     </div>
     <p style="color: var(--text2); font-size: 0.85rem; margin-top: 16px;">Zero-day exploits represent 32% of all dark web vulnerability listings, with 31% priced above $20,000. Premium exploits reach multi-million dollar valuations in private channels. Corporate access credentials trade for $500-$3,000 on average.</p>
+  </div>
+</section>
+
+<!-- Black Market Ecosystem -->
+<section id="darkmarket">
+  <span class="section-tag broker">Black Market Deep Dive</span>
+  <h2 class="section-title">The Dark Web Cyber Arms Bazaar</h2>
+  <p class="section-subtitle">A multi-layered underground economy where exploits, access, and weaponized tools are traded. From elite Russian forums to ephemeral Telegram channels — the ecosystem that supplies nation-state grade capabilities to anyone with crypto.</p>
+
+  <div class="tabs" id="darkmarket-tabs">
+    <button class="tab active" data-tab="dm-forums">Forums & Marketplaces</button>
+    <button class="tab" data-tab="dm-pricing">Pricing & Listings</button>
+    <button class="tab" data-tab="dm-matrix">Availability Matrix</button>
+  </div>
+
+  <div id="dm-forums" class="tab-content active">
+    <div class="market-grid">
+      <div class="market-card">
+        <div class="market-price">RAMP</div>
+        <div class="market-label">Russian RaaS Forum — 14,000+ members</div>
+        <p style="color: var(--text2); font-size: 0.85rem; line-height: 1.5;">Access: active on XSS/Exploit (2+ months, 10+ posts) OR $500 anonymous fee. Admin claims ~$250K annual revenue. Leaked DB (Nov 2021-Jan 2024): 333 IAB threads. Top categories: Initial Access (VPN/RDP $500-$30K), Exploits & 0-days ($30K-$100K), Crypters/FUD ($70-$2K/mo), Ransomware kits ($500-$10K), RATs ($45-$500), Stealers ($100-$1K), Botnets ($1K-$25K), Loaders ($200-$500).</p>
+      </div>
+      <div class="market-card">
+        <div class="market-price">Exploit.in</div>
+        <div class="market-label">Longest-running Russian Exploit Market</div>
+        <p style="color: var(--text2); font-size: 0.85rem; line-height: 1.5;">Auction-style bidding for premium access. Average initial price (2024): $2,812 (up 88% from 2023). Average blitz/buy-it-now: $5,784 (up 103%). Highest observed: $25K initial / $30K blitz. Categories: exploits, 0-days, access, malware, crypto, tutorials. Declining in 2025-2026 — aging user base, RAMP taking over.</p>
+      </div>
+      <div class="market-card">
+        <div class="market-price">Telegram</div>
+        <div class="market-label">Private Channels — Fastest Growing Platform</div>
+        <p style="color: var(--text2); font-size: 0.85rem; line-height: 1.5;">Major migration from Tor forums to Telegram. Lower barrier, faster, ephemeral, harder to police. VIP stealer logs ($200-400/mo XMR), 0-day exploits ($50K-$4M), MaaS channels ($500-$5K/mo), HVNC RAT suites ($5K/mo), EDR killers ($1-3K/mo), DDoS botnet rental ($50-$500/day). Zero-click pricing: WhatsApp $1M-$3M, Telegram $500K-$1.5M, Telegram full chain $4M.</p>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top: 24px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Marketplace</th>
+            <th>Status</th>
+            <th>Focus</th>
+            <th>Price Range</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>RAMP</td><td>Active</td><td>RaaS + IAB</td><td>$500-$30K</td><td>Russian, highest quality, tough entry</td></tr>
+          <tr><td>Exploit.in</td><td>Active (declining)</td><td>Exploits + IAB</td><td>$500-$25K</td><td>Oldest, aging user base</td></tr>
+          <tr><td>XSS.is</td><td>Frequent seizures</td><td>IAB + Malware</td><td>$500-$5K</td><td>Frequent LE disruption</td></tr>
+          <tr><td>DarkForums</td><td>Active (rising)</td><td>Hybrid</td><td>$500-$15K</td><td>English-language, open registration</td></tr>
+          <tr><td>BreachForums</td><td>Seized/rebooted</td><td>Breach data</td><td>$500-$10K</td><td>Repeatedly disrupted by FBI</td></tr>
+          <tr><td>Telegram</td><td>Active (growing)</td><td>All categories</td><td>$200-$4M</td><td>Hardest to police, fastest growing</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="dm-pricing" class="tab-content">
+    <div class="market-grid">
+      <div class="market-card">
+        <div class="market-price">$6,400</div>
+        <div class="market-label">Average IAB Price (2025-2026) — up 88-103% from 2023</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$500-$1,500</div>
+        <div class="market-label">Commodity RDP Access</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$5,000+</div>
+        <div class="market-label">Domain Admin Access (Financial, $400M+ rev)</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$20,000+</div>
+        <div class="market-label">Domain Admin Access (Healthcare, US)</div>
+      </div>
+      <div class="market-card">
+        <div class="market-price">$30,000</div>
+        <div class="market-label">Highest Observed Buy-It-Now for IAB</div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top: 24px;">
+      <p style="color: var(--text2); margin-bottom: 16px; font-size: 0.9rem;">Top Initial Access Brokers on RAMP Forum (leaked database):</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Alias</th>
+            <th>Listings</th>
+            <th>Specialty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>inthematrix</td><td>41</td><td>Corporate RDP — US, EU, Asia, Government</td></tr>
+          <tr><td>boxi</td><td>23</td><td>VNC/SSH access + data dumps</td></tr>
+          <tr><td>el84</td><td>18</td><td>Brazil, Israel, Telecom</td></tr>
+          <tr><td>RobinHood</td><td>12</td><td>Access broker + RaaS operator "KUIPER"</td></tr>
+          <tr><td>jacksparrow</td><td>11</td><td>US/EU RDP access</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="color: var(--text2); margin-top: 24px; font-size: 0.85rem;">Payment methods: Bitcoin (BTC, standard, 5-30 min confirm, traceable), Monero (XMR, preferred, mandatory on many forums, untraceable), USDT (TRC20, growing, stable value). Escrow: 4% fee on RAMP — platform holds payment until delivery confirmed.</p>
+  </div>
+
+  <div id="dm-matrix" class="tab-content">
+    <div class="table-wrap">
+      <table class="acq-table">
+        <thead>
+          <tr>
+            <th>Tool / Category</th>
+            <th>Where to Get It</th>
+            <th>Price</th>
+            <th>Can You Buy It?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>NSA Equation Group tools</td><td>Leaked (Shadow Brokers/GitHub)</td><td>FREE</td><td>Yes — leaked publicly</td></tr>
+          <tr><td>CIA Vault 7 tools</td><td>Leaked (WikiLeaks/GitHub)</td><td>FREE</td><td>Yes — leaked publicly</td></tr>
+          <tr><td>Pegasus</td><td>NSO Group contract only</td><td>$500K-$8M+</td><td>No — gov license only</td></tr>
+          <tr><td>Predator</td><td>Intellexa contract only</td><td>EUR 8-13.6M</td><td>No — gov license only</td></tr>
+          <tr><td>FinFisher/FinSpy</td><td>Gamma Group license</td><td>$130K-$500K</td><td>No — LE license only</td></tr>
+          <tr><td>EternalBlue/DOUBLEPULSAR</td><td>GitHub (Metasploit modules)</td><td>FREE</td><td>Yes — integrated into tools</td></tr>
+          <tr><td>SUNBURST</td><td>Never leaked</td><td>N/A</td><td>No — SVR only</td></tr>
+          <tr><td>Shamoon</td><td>Never leaked</td><td>N/A</td><td>No — Iran only</td></tr>
+          <tr><td>Snake (Turla)</td><td>Never leaked</td><td>N/A</td><td>No — FSB only</td></tr>
+          <tr><td>0-day exploits (browser)</td><td>Telegram private channels</td><td>$80K-$4M</td><td>Yes — via brokers/IABs</td></tr>
+          <tr><td>0-day exploits (mobile)</td><td>Crowdfense/Operation Zero</td><td>$2.5M-$20M</td><td>Yes — if you're a government</td></tr>
+          <tr><td>Initial Access (VPN/RDP)</td><td>RAMP/Exploit/DarkForums</td><td>$500-$30K</td><td>Yes — anyone with crypto</td></tr>
+          <tr><td>Ransomware kits</td><td>RAMP/Telegram</td><td>$500-$10K</td><td>Yes — includes builder + panel</td></tr>
+          <tr><td>Cobalt Strike (cracked)</td><td>RAMP</td><td>$5K</td><td>Yes — cracked version</td></tr>
+          <tr><td>Botnet rental</td><td>Telegram</td><td>$50-$500/day</td><td>Yes — pay per use</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" style="margin-top: 24px;">
+      <p style="color: var(--text2); margin-bottom: 16px; font-size: 0.9rem;">Major Commercial Spyware Vendor Landscape:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th>Country</th>
+            <th>Product</th>
+            <th>Cost</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>NSO Group</td><td>Israel</td><td>Pegasus</td><td>$500K setup + $650K/10 targets</td><td>US Entity List</td></tr>
+          <tr><td>Intellexa/Cytrox</td><td>Greece/Israel</td><td>Predator</td><td>EUR 8-13.6M/deployment</td><td>US-sanctioned</td></tr>
+          <tr><td>Candiru</td><td>Israel</td><td>DevilsTongue</td><td>Unknown</td><td>US Entity List</td></tr>
+          <tr><td>QuaDream</td><td>Israel</td><td>REIGN</td><td>Unknown</td><td>Shut down Apr 2023</td></tr>
+          <tr><td>Paragon</td><td>Israel</td><td>Graphite</td><td>Unknown</td><td>Active</td></tr>
+          <tr><td>Variston IT</td><td>Spain</td><td>Heliconia</td><td>Unknown</td><td>Active</td></tr>
+          <tr><td>RCS Lab</td><td>Italy</td><td>Hermit</td><td>Unknown</td><td>Active</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
